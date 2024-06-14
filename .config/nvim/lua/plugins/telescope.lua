@@ -54,22 +54,22 @@ return {
 
     keymap.set("n", "<leader>ff", "<cmd>Telescope find_files hidden=true<cr>", { desc = "Fuzzy find files in cwd" })
     keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
-    keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep hidden=true<cr>", { desc = "Find string in cwd" })
+    keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 
     keymap.set(
       "n",
       "<leader>fd",
-      "<cmd>Telescope find_files cwd=~/Desktop/<cr> hidden=true",
+      "<cmd>Telescope find_files cwd=~/Desktop/ hidden=true<cr>",
       { desc = "Fuzzy find files in Desktop" }
     )
-    keymap.set(
-      "n",
-      "<leader>fdd",
-      "<cmd>Telescope live_grep <cwd=~/Desktop/cr> hidden=true",
-      { desc = "Find string in Desktop" }
-    )
+    -- keymap.set(
+    --   "n",
+    --   "<leader>fdd",
+    --   "<cmd>Telescope live_grep <cwd=~/Desktop/cr> hidden=true",
+    --   { desc = "Find string in Desktop" }
+    -- )
 
     keymap.set(
       "n",
@@ -86,13 +86,13 @@ return {
 
     keymap.set(
       "n",
-      "<leader>df",
+      "<leader>ds",
       "<cmd>Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true<cr>",
       { desc = "Fuzzy find folder in Desktop" }
     )
     keymap.set(
       "n",
-      "<leader>dff",
+      "<leader>df",
       "<cmd>Telescope project-manager live_find_dirs cwd=~/Desktop/ hidden=true<cr>",
       { desc = "Fuzzy live find folder in Desktop" }
     )
