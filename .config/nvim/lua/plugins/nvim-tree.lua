@@ -26,7 +26,7 @@ return {
               color = true,
             },
             folder = {
-              enable = true,
+              enable = false,
               color = true,
             },
           },

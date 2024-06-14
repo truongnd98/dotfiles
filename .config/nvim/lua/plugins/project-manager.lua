@@ -13,6 +13,7 @@ return {
         default_exclude = {
           -- default
           "node_modules",
+          ".git",
           "*/ios/Runner*",
           "*/macos/Runner*",
           "*/ios/Pods*",
