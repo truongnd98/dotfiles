@@ -8,20 +8,6 @@ return {
     "nvim-tree/nvim-tree.lua",
   },
   config = function()
-    require("project-manager").setup({
-      fd = {
-        default_exclude = {
-          -- default
-          "node_modules",
-          ".git",
-          "*/ios/Runner*",
-          "*/macos/Runner*",
-          "*/ios/Pods*",
-          "*/macos/Pods*",
-          "*/build/ios*",
-          "*/build/macos*",
-        },
-      },
-    })
+    require("project-manager").setup({})
   end,
 }

@@ -2,7 +2,7 @@
 normal = [
   "JetBrainsMono Nerd Font Mono",
 ] # Will use the bundled Fira Code Nerd Font by default
-size = 15.0
+size = 16.0
 
 # fork = false
 # frame = "full"
