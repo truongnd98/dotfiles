@@ -11,6 +11,7 @@ return {
         hl.VisualNOS = { bg = c.bg_visual, reverse = true } -- Visual mode selection when vim is "Not Owning the Selection".
         hl["@variable"] = { fg = c.yellow, style = config.options.styles.variables }
         hl.DiagnosticUnnecessary = { style = "bold,italic,undercurl", bg = c.none, fg = c.none, sp = c.hint }
+        hl["WinSeparator"] = { bg = "#1F2335", fg = "#565f89" }
       end,
     })
 

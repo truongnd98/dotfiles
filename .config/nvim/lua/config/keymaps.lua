@@ -9,8 +9,14 @@ local make_opts = function(custom_opts)
   return vim.tbl_extend("force", { noremap = true, silent = true }, custom_opts or {})
 end
 
+-- Select all
+keymap("n", "<C-a>", "gg<S-v>G")
+keymap("n", "<D-a>", "gg<S-v>G")
+
+keymap("n", "s", "<nop>", make_opts())
+keymap("n", "ss", "<nop>", make_opts({}))
 -- Split window
-keymap("n", "ss", ":split<Return>", make_opts())
+keymap("n", "sd", ":split<Return>", make_opts())
 keymap("n", "sv", ":vsplit<Return>", make_opts())
 -- Move window
 keymap("n", "sh", "<C-w>h", make_opts())
@@ -19,10 +25,10 @@ keymap("n", "sj", "<C-w>j", make_opts())
 keymap("n", "sl", "<C-w>l", make_opts())
 
 -- Resize window
-keymap("n", "<C-w><left>", "<C-w><")
-keymap("n", "<C-w><right>", "<C-w>>")
-keymap("n", "<C-w><up>", "<C-w>+")
-keymap("n", "<C-w><down>", "<C-w>-")
+keymap("n", "s<left>", "<C-w>2<")
+keymap("n", "s<right>", "<C-w>2>")
+keymap("n", "s<up>", "<C-w>2+")
+keymap("n", "s<down>", "<C-w>2-")
 
 local function run_func_with_delay(fn, delay, ...)
   local args = { ... }
