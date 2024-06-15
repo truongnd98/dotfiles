@@ -2,12 +2,27 @@
 local Util = require("lazyvim.util")
 
 -- DO NOT USE THIS IN YOU OWN CONFIG!!
--- use `vim.keymap.set` instead
+-- use `vim.keymap` instead
 local keymap = Util.safe_keymap_set
 
 local make_opts = function(custom_opts)
-  return vim.tbl_extend("force", { silent = true }, custom_opts or {})
+  return vim.tbl_extend("force", { noremap = true, silent = true }, custom_opts or {})
 end
+
+-- Split window
+keymap("n", "ss", ":split<Return>", make_opts())
+keymap("n", "sv", ":vsplit<Return>", make_opts())
+-- Move window
+keymap("n", "sh", "<C-w>h", make_opts())
+keymap("n", "sk", "<C-w>k", make_opts())
+keymap("n", "sj", "<C-w>j", make_opts())
+keymap("n", "sl", "<C-w>l", make_opts())
+
+-- Resize window
+keymap("n", "<C-w><left>", "<C-w><")
+keymap("n", "<C-w><right>", "<C-w>>")
+keymap("n", "<C-w><up>", "<C-w>+")
+keymap("n", "<C-w><down>", "<C-w>-")
 
 local function run_func_with_delay(fn, delay, ...)
   local args = { ... }
