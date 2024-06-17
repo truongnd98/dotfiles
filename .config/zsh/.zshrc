@@ -209,3 +209,6 @@ fi
 
 # ---- cd command ----
 alias CD="cd"
+
+# ---- Clean screen----
+alias cls="printf \"\033c\""

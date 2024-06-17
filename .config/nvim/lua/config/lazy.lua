@@ -47,7 +47,7 @@ require("lazy").setup({
       ft = "📂",
       init = "⚙",
       keys = "🗝",
-      plugin = "🔌",
+      plugin = "🧩", -- 🔌
       runtime = "💻",
       source = "📄",
       start = "🚀",

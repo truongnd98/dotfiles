@@ -9,6 +9,18 @@ return {
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
 
+    local on_attach = function(bufnr)
+      local api = require("nvim-tree.api")
+      api.config.mappings.default_on_attach(bufnr)
+      local keymap = vim.keymap
+      keymap.set(
+        "n",
+        "s",
+        "<nop>",
+        { desc = "nvim-tree: Disable Run System", buffer = bufnr, noremap = true, silent = true }
+      )
+    end
+
     nvimtree.setup({
       view = {
         width = 35,
@@ -51,11 +63,12 @@ return {
         },
       },
       filters = {
-        custom = { ".DS_Store" },
+        custom = { ".DS_Store", ".git" },
       },
       git = {
-        ignore = false,
+        -- ignore = true,
       },
+      on_attach = on_attach,
     })
 
     -- set keymaps

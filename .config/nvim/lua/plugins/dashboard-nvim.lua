@@ -25,23 +25,22 @@ return {
         header = vim.split(logo, "\n"),
         -- stylua: ignore
         center = {
-          { action = "Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true",       desc = " Find Folder in Desktop",       icon = "  ", key = "<D-d>" },
-          -- { action = "Telescope project-manager live_find_dirs cwd=~/Desktop/ hidden=true no_ignore=true",  desc = " Live Find Folder in Desktop",  icon = "  ", key = "<D-f>" },
-          { action = "Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true", desc = " Find File in Desktop",   icon = "  󰈙", key = "<D-f>" },
-          { action = "Telescope project-manager find_files hidden=true no_ignore=true",                desc = " Find File",    icon = "  󰈙 ", key = "f  " },
-          { action = "ene | startinsert",                               desc = " New File",     icon = "    ", key = "n  " },
-          -- { action = "Telescope oldfiles",                             desc = " Recent Files",    icon = " ", key = "r  " },
-          -- { action = "Telescope project-manager live_grep hidden=true no_ignore=true",                            desc = "  Find Text",       icon = " ", key = "g  " },
-          { action = 'lua LazyVim.pick.config_files()()',               desc = " Config",       icon = "    ", key = "c  " },
-          -- { action = 'lua require("persistence").load()',              desc = " Restore Session", icon = " ", key = "s  " },
-          { action = "LazyExtras",                                      desc = " Lazy Extras",  icon = "    ", key = "x  " },
-          { action = "Lazy",                                            desc = " Lazy",         icon = "  󰒲  ", key = "l  " },
-          { action = function() vim.api.nvim_input("<cmd>qa<cr>") end,  desc = " Quit",         icon = "    ", key = "q  " },
+          { action = "Telescope project-manager find_projects cwd=~/Desktop/",                                    desc = " List Projects",          icon = "🍻", key = "p" },
+          { action = "Telescope project-manager find_and_open_project cwd=~/Desktop/ hidden=true no_ignore=true", desc = " Open New Project",       icon = "🍺", key = "o" },
+          { action = "Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true",             desc = " Find Folder in Desktop", icon = "🗂️", key = "<D-d>" },
+          { action = "Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true",            desc = " Find File in Desktop",   icon = "📑", key = "<D-f>" },
+          { action = "Telescope project-manager find_files hidden=true no_ignore=true",                           desc = " Find File",              icon = "📄", key = "f" },
+          { action = "ene | startinsert",                               desc = " New File",         icon = "📝",  key = "n" },
+          { action = 'lua LazyVim.pick.config_files()()',               desc = " Config",           icon = "🛠️",  key = "c" },
+          { action = 'lua require("persistence").load()',               desc = " Restore Session",  icon = "⚙️ ",  key = "s" },
+          { action = "LazyExtras",                                      desc = " Lazy Extras",      icon = "📦",  key = "x" },
+          { action = "Lazy",                                            desc = " Lazy",             icon = "💤",  key = "l" },
+          { action = function() vim.api.nvim_input("<cmd>qa<cr>") end,  desc = " Quit",             icon = "🚪",  key = "q" },
        },
         footer = function()
           local stats = require("lazy").stats()
           local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-          return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+          return { "🔥 Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
         end,
       },
     }

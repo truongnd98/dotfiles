@@ -27,7 +27,7 @@ return {
     telescope.setup({
       defaults = {
         path_display = {
-          -- "smart"
+          truncate = 3,
         },
         set_env = {
           COLORTERM = "xterm-256color",
@@ -44,8 +44,6 @@ return {
         },
       },
     })
-
-    print("CWD: " .. vim.loop.cwd())
 
     telescope.load_extension("fzf")
     telescope.load_extension("project-manager")
@@ -79,12 +77,6 @@ return {
       "<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
       { desc = "Fuzzy find files in Desktop" }
     )
-    -- keymap.set(
-    --   "n",
-    --   "<leader>fdd",
-    --   "<cmd>Telescope project-manager live_grep <cwd=~/Desktop/cr> hidden=true no_ignore=true<cr>
-    --   { desc = "Find string in Desktop" }
-    -- )
 
     keymap.set(
       "n",
@@ -111,6 +103,14 @@ return {
       "<cmd>Telescope project-manager live_find_dirs cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
       { desc = "Fuzzy live find folder in Desktop" }
     )
+
+    keymap.set(
+      "n",
+      "<leader>p",
+      "<cmd>Telescope project-manager find_projects cwd=~/Desktop/<cr>",
+      { desc = "Find projects" }
+    )
+
     -- disable keymap <leader><leader>
     keymap.set("n", "<leader><leader>", "<nop>", { desc = "Disable <leader><leader>", nowait = true })
   end,

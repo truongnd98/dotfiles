@@ -1,3 +1,5 @@
+maximized = true
+
 [font]
 normal = [
   "JetBrainsMono Nerd Font Mono",
@@ -7,7 +9,6 @@ size = 14.0
 # fork = false
 # frame = "full"
 # idle = true
-# maximized = false
 # neovim-bin = "/usr/bin/nvim" # in reality found dynamically on $PATH if unset
 # no-multigrid = false
 # srgb = false

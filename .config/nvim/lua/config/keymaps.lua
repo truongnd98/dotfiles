@@ -9,12 +9,23 @@ local make_opts = function(custom_opts)
   return vim.tbl_extend("force", { noremap = true, silent = true }, custom_opts or {})
 end
 
+-- Always insert at the end of the line
+keymap("n", "p", "P", make_opts())
+
+-- Config clipboard for Neovide
+if vim.g.neovide then
+  -- keymap("n", "<D-s>", ":w<CR>", { noremap = true }) -- Save
+  vim.api.nvim_set_keymap("v", "<D-c>", '"+y', { noremap = true })
+  vim.api.nvim_set_keymap("n", "<D-v>", '"+P', { noremap = true })
+  vim.api.nvim_set_keymap("v", "<D-v>", '"+P', { noremap = true })
+  vim.api.nvim_set_keymap("c", "<D-v>", "<C-R>+", { noremap = true })
+  vim.api.nvim_set_keymap("i", "<D-v>", "<C-R>+", { noremap = true })
+  vim.api.nvim_set_keymap("t", "<D-v>", '<C-\\><C-n>"+Pi', { noremap = true })
+end
+
 -- Select all
-keymap("n", "<C-a>", "gg<S-v>G")
 keymap("n", "<D-a>", "gg<S-v>G")
 
-keymap("n", "s", "<nop>", make_opts())
-keymap("n", "ss", "<nop>", make_opts({}))
 -- Split window
 keymap("n", "sd", ":split<Return>", make_opts())
 keymap("n", "sv", ":vsplit<Return>", make_opts())
