@@ -189,7 +189,7 @@ eval "$(zoxide init zsh)"
 alias cd="z"
 
 # ---- Vim ----
-alias vim="nvim"
+# alias vim="nvim"
 
 # ---- Clean terminal screen----
 
@@ -212,3 +212,4 @@ alias CD="cd"
 
 # ---- Clean screen----
 alias cls="printf \"\033c\""
+
