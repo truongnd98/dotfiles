@@ -1,87 +1,54 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+vim.g.mapleader = " "
 
-local opt = vim.opt
+vim.opt.encoding = "utf-8"
+vim.opt.fileencoding = "utf-8"
 
-vim.cmd("let g:netrw_liststyle = 3")
+vim.opt.number = true
 
--- -- UFO folding
--- opt.foldcolumn = "1" -- '0' is not bad
--- opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
--- opt.foldlevelstart = 99
--- opt.foldenable = true
--- opt.fillchars = {
---   eob = " ",
---   fold = " ",
---   foldopen = "",
---   foldsep = " ",
---   foldclose = "",
--- }
+vim.opt.title = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.hlsearch = true
+vim.opt.backup = false
+vim.opt.showcmd = true
+vim.opt.cmdheight = 1
+vim.opt.laststatus = 3
+vim.opt.expandtab = true
+vim.opt.scrolloff = 10
+-- vim.opt.shell = "zsh"
+vim.opt.backupskip = { "/tmp/*", "/private/tmp/*" }
+vim.opt.inccommand = "split"
+vim.opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
+vim.opt.smarttab = true
+vim.opt.breakindent = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.wrap = false -- No Wrap lines
+vim.opt.backspace = { "start", "eol", "indent" }
+vim.opt.path:append({ "**" }) -- Finding files - Search down into subfolders
+vim.opt.wildignore:append({ "*/node_modules/*" })
+vim.opt.splitbelow = true -- Put new windows below current
+vim.opt.splitright = true -- Put new windows right of current
+vim.opt.splitkeep = "cursor"
+vim.opt.mouse = ""
 
--- CUSTOM OPT
-opt.showmode = true
-opt.mouse = ""
--- opt.mouse = "a"
-opt.timeoutlen = 250
-opt.updatetime = 40
-opt.ttimeoutlen = 50
-opt.guicursor = "sm:block,n-v-i-c-ci-ve:ver30,r-cr-o:hor20"
-opt.virtualedit = { "block", "onemore" }
--- opt.listchars:append({ tab = "▷▷⋮" })
--- opt.listchars:append({ space = "_" })
-opt.listchars:append({ eol = "↲" })
+-- Undercurl
+vim.cmd([[let &t_Cs = "\e[4:3m"]])
+vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
-opt.relativenumber = true
-opt.number = true
+-- Add asterisks in block comments
+vim.opt.formatoptions:append({ "r" })
 
--- -- tabs & indentation
-opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 2 -- 2 spaces for indent width
-opt.expandtab = true -- expand tab to spaces
-opt.autoindent = true -- copy indent from current line when starting new one
+vim.cmd([[au BufNewFile,BufRead *.astro setf astro]])
+vim.cmd([[au BufNewFile,BufRead Podfile setf ruby]])
 
-opt.wrap = false
-
--- search settings
-opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
-
-opt.cursorline = true
-
--- turn on termguicolors for tokyonight colorscheme to work
--- (have to use iterm2 or any other true color terminal)
-opt.termguicolors = true
-opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "yes" -- show sign column so that text doesn't shift
-
--- backspace
-opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
-
--- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
-
--- split windows
-opt.splitright = true -- split vertical window to the right
-opt.splitbelow = true -- split horizontal window to the bottom
-
--- turn off swapfile
-opt.swapfile = false
-
--- opt.guifont = "JetBrainsMono Nerd Font Mono:h14"
-
----- FOR NEOVIM-DEOVIDE ----
+if vim.fn.has("nvim-0.8") == 1 then
+	vim.opt.cmdheight = 0
+end
 
 local g = vim.g
--- Helper function for transparency formatting
-local alpha = function()
-  return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
-end
--- -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
--- g.neovide_transparency = 0.0
--- g.transparency = 0.3
--- g.neovide_background_color = "#1F2335" .. alpha()
 
-g.neovide_show_border = true
-g.neovide_window_blurred = true
-g.neovide_underline_stroke_scale = 1.0
+g.loaded_python3_provider = 0
+g.loaded_ruby_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_node_provider = 0
