@@ -13,18 +13,18 @@ yellow = "#ff9e64"
 
 [colors.normal]
 black = "#32344a"
-blue = "#7aa2f7"
-cyan = "#449dab"
+blue = "#4a80f4"
+cyan = "#00e6e6"
 #green = "#9ece6a"
 green = "#00A300"
 magenta = "#ad8ee6"
 red = "#f7768e"
 white = "#787c99"
-yellow = "#e0af68"
+yellow = "#ff9e64"
 
 [colors.primary]
 background = "#11121D"
-foreground = "#a9b1d6"
+foreground = "#FAFAFA"
 
 [env]
 TERM = "xterm-256color"
