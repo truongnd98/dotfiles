@@ -126,9 +126,24 @@ local i_mode_toggle_cmt = function()
 	vim.cmd("normal gcc")
 end
 
-keymap.set({ "n" }, "gc", toggle_cmt, { expr = true, desc = "Toggle comment line" })
+keymap.set({ "n" }, "gc", toggle_cmt, { expr = true, nowait = true, desc = "Toggle comment line" })
 -- keymap.set({ "n", "v" }, "c", toggle_cmt, { expr = true, desc = "Toggle comment line" })
-keymap.set({ "n", "v" }, "<D-/>", toggle_cmt, { expr = true, desc = "Toggle comment line" }) -- Command + /
-keymap.set("i", "<D-/>", i_mode_toggle_cmt, { desc = "Toggle comment line" }) -- Command + /
--- keymap.set({ "n", "v" }, "<C-/>", toggle_cmt, { expr = true, desc = "Toggle comment line" }) -- Control + /
--- keymap.set("i", "<C-/>", i_mode_toggle_cmt, { desc = "Toggle comment line" }) -- Control + /
+-- keymap.set({ "n", "v" }, "<D-/>", toggle_cmt, { expr = true, desc = "Toggle comment line" }) -- Command + /
+-- keymap.set("i", "<D-/>", i_mode_toggle_cmt, { desc = "Toggle comment line" }) -- Command + /
+keymap.set({ "n", "v" }, "<C-/>", toggle_cmt, { expr = true, desc = "Toggle comment line" }) -- Control + /
+keymap.set("i", "<C-/>", i_mode_toggle_cmt, { desc = "Toggle comment line" }) -- Control + /
+
+-- Terminal
+local lazyterm = function()
+	LazyVim.terminal(nil, { cwd = LazyVim.root() })
+end
+keymap.set("n", "<C-t>", lazyterm, { desc = "Terminal (Root Dir)" })
+keymap.set("t", "<C-t>", "<cmd>close<cr>", { desc = "Hide Terminal" })
+
+-- Coppy/Paste
+vim.api.nvim_set_keymap("v", "<C-c>", '"+y', { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-v>", '"+P', { noremap = true })
+vim.api.nvim_set_keymap("v", "<C-v>", '"+P', { noremap = true })
+vim.api.nvim_set_keymap("c", "<C-v>", "<C-R>+", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-v>", "<C-R>+", { noremap = true })
+vim.api.nvim_set_keymap("t", "<C-v>", '<C-\\><C-n>"+Pi', { noremap = true })
