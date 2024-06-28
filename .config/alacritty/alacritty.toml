@@ -73,5 +73,5 @@ multiplier = 3
 blink_interval = 500
 
 [cursor.style]
-shape = "Beam"
+# shape = "Beam"
 blinking = "Always"
