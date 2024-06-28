@@ -22,6 +22,33 @@ return {
 						"thumbs.db",
 					},
 				},
+				follow_current_file = {
+					enabled = true,
+					leave_dirs_open = true,
+				},
+				use_libuv_file_watcher = true,
+				window = {
+					mappings = {
+						["s"] = "",
+					},
+				},
+			},
+			default_component_configs = {
+				git_status = {
+					symbols = {
+						-- Change type
+						added = "✚",
+						deleted = "✖",
+						modified = "",
+						renamed = "󰁕",
+						-- Status type
+						untracked = "?",
+						ignored = "",
+						unstaged = "󰄱",
+						staged = "",
+						conflict = "",
+					},
+				},
 			},
 		})
 
