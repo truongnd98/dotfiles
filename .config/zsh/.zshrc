@@ -211,5 +211,6 @@ fi
 alias CD="cd"
 
 # ---- Clean screen----
-alias cls="printf \"\033c\""
+# alias cls="printf \"\033c\""
+alias cls="printf '\33c\e[3j'"
 
