@@ -56,6 +56,7 @@ return {
 				build = "make",
 			},
 			"truongnd98/project-manager.nvim",
+			"nvim-telescope/telescope-ui-select.nvim",
 		},
 		config = function()
 			local telescope = require("telescope")
@@ -64,9 +65,9 @@ return {
 				defaults = {
 					wrap_results = true,
 					layout_strategy = "horizontal",
-					layout_config = { prompt_position = "top" },
+					-- layout_config = { prompt_position = "top" },
 					path_display = { truncate = 3 },
-					sorting_strategy = "ascending",
+					-- sorting_strategy = "ascending",
 					winblend = 0,
 					mappings = {
 						n = {},
@@ -81,11 +82,17 @@ return {
 						},
 					},
 				},
+				extensions = {
+					["ui-select"] = {
+						require("telescope.themes").get_dropdown(),
+					},
+				},
 			}
 
 			telescope.setup(opts)
-			telescope.load_extension("fzf")
-			telescope.load_extension("project-manager")
+			pcall(telescope.load_extension, "fzf")
+			pcall(telescope.load_extension, "ui-select")
+			pcall(telescope.load_extension, "project-manager")
 
 			-- set keymaps
 			local keymap = vim.keymap -- for conciseness

@@ -26,7 +26,7 @@ return {
 					enabled = true,
 					leave_dirs_open = true,
 				},
-				use_libuv_file_watcher = true,
+				-- use_libuv_file_watcher = true,
 				window = {
 					mappings = {
 						["s"] = "",
@@ -56,10 +56,25 @@ return {
 		local opts = { noremap = true, silent = true }
 
 		keymap.set("n", "<leader>e", function()
-			require("neo-tree.command").execute({ toggle = false })
+			vim.schedule(function()
+				require("neo-tree.command").execute({ toggle = false })
+			end)
 		end, opts)
 		keymap.set("n", "<leader>ee", function()
-			require("neo-tree.command").execute({ toggle = true })
+			vim.schedule(function()
+				require("neo-tree.command").execute({ toggle = true })
+			end)
+		end, opts)
+
+		keymap.set("n", "<leader>E", function()
+			vim.schedule(function()
+				require("neo-tree.command").execute({ toggle = false })
+			end)
+		end, opts)
+		keymap.set("n", "<leader>EE", function()
+			vim.schedule(function()
+				require("neo-tree.command").execute({ toggle = true })
+			end)
 		end, opts)
 	end,
 }

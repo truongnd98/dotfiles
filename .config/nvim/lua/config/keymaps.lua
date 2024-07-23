@@ -1,6 +1,8 @@
-local discipline = require("craftzdog.discipline")
+-- local discipline = require("craftzdog.discipline")
 
-discipline.cowboy()
+-- discipline.cowboy()
+
+local lspbuf = require("vim.lsp.buf")
 
 local keymap = vim.keymap
 
@@ -31,6 +33,70 @@ keymap.set("n", "ds", 'v^"_d')
 -- Delete after cursor
 keymap.set("n", "de", 'v$h"_d')
 
+-- Replace text selection
+function tbl_length(T)
+	local count = 0
+	for _ in pairs(T) do
+		count = count + 1
+	end
+	return count
+end
+local escape_chars = function(string)
+	return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
+		["\\"] = "\\\\",
+		["-"] = "\\-",
+		-- ["("] = "\\(",
+		-- [")"] = "\\)",
+		["["] = "\\[",
+		["]"] = "\\]",
+		-- ["{"] = "\\{",
+		["}"] = "\\}",
+		-- ["?"] = "\\?",
+		["+"] = "\\+",
+		["*"] = "\\*",
+		["^"] = "\\^",
+		["$"] = "\\$",
+		["."] = "\\.",
+	})
+end
+keymap.set("v", "<leader>h", function()
+	local _, csrow, cscol, cerow, cecol
+	_, csrow, cscol, _ = unpack(vim.fn.getpos("."))
+	_, cerow, cecol, _ = unpack(vim.fn.getpos("v"))
+
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+
+	if cerow < csrow then
+		csrow, cerow = cerow, csrow
+	end
+	if cecol < cscol then
+		cscol, cecol = cecol, cscol
+	end
+	local lines = vim.fn.getline(csrow, cerow)
+	local n = tbl_length(lines)
+	if n <= 0 then
+		return
+	end
+	lines[n] = string.sub(lines[n], 1, cecol)
+	lines[1] = string.sub(lines[1], cscol)
+
+	local text_selected = table.concat(lines, "\\n")
+	local text_replace = table.concat(lines, "\\r")
+
+	text_selected = escape_chars(text_selected)
+	text_replace = escape_chars(text_replace)
+
+	local replace_cmd = ":%s/" .. text_selected .. "/" .. text_replace
+	vim.api.nvim_feedkeys(replace_cmd, "n", true)
+end)
+
+-- Preview docs
+keymap.set("n", "<Tab><Tab>", function()
+	vim.schedule(function()
+		lspbuf.hover()
+	end)
+end)
+
 -- Select all
 keymap.set("n", "<C-a>", "gg<S-v>G")
 
@@ -58,23 +124,25 @@ keymap.set("n", "sj", "<C-w>j")
 keymap.set("n", "sl", "<C-w>l")
 
 -- Resize window
-keymap.set("n", "<C-w><left>", "<C-w><")
-keymap.set("n", "<C-w><right>", "<C-w>>")
-keymap.set("n", "<C-w><up>", "<C-w>+")
-keymap.set("n", "<C-w><down>", "<C-w>-")
+keymap.set("n", "s<left>", "<C-w>4<")
+keymap.set("n", "s<right>", "<C-w>4>")
+keymap.set("n", "s<up>", "<C-w>4+")
+keymap.set("n", "s<down>", "<C-w>4-")
+-- Disable insert key `s`
+keymap.set("n", "s", "<nop>")
 
--- Diagnostics
-keymap.set("n", "<C-j>", function()
-	vim.diagnostic.goto_next()
-end, opts)
+-- -- Diagnostics
+-- keymap.set("n", "<C-j>", function()
+-- 	vim.diagnostic.goto_next()
+-- end, opts)
 
-keymap.set("n", "<leader>r", function()
-	require("craftzdog.hsl").replaceHexWithHSL()
-end)
-
-keymap.set("n", "<leader>i", function()
-	require("craftzdog.lsp").toggleInlayHints()
-end)
+-- keymap.set("n", "<leader>r", function()
+-- 	require("craftzdog.hsl").replaceHexWithHSL()
+-- end)
+--
+-- keymap.set("n", "<leader>i", function()
+-- 	require("craftzdog.lsp").toggleInlayHints()
+-- end)
 
 -- Commenting
 local function run_func_with_delay(fn, delay, ...)
@@ -151,3 +219,7 @@ keymap.set("v", "<C-v>", '"+P', { noremap = true })
 keymap.set("c", "<C-v>", "<C-R>+", { noremap = true })
 keymap.set("i", "<C-v>", "<C-R>+", { noremap = true })
 keymap.set("t", "<C-v>", '<C-\\><C-n>"+Pi', { noremap = true })
+
+-- Buffer switch
+keymap.set("n", "<C-j>", "<cmd>bprevious<cr>")
+keymap.set("n", "<C-k>", "<cmd>blast<cr>")
