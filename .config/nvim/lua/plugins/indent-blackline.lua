@@ -47,6 +47,7 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	opts = function(_, opts)
 		opts = {
+			exclude = { filetypes = { "dashboard" } },
 			indent = {
 				-- char = "+",
 				-- tab_char = "⇥",

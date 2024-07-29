@@ -23,6 +23,19 @@ require("lazy").setup({
 					lazyvim = true,
 					neovim = true,
 				},
+				icons = {
+					diagnostics = {
+						Error = " ",
+						Warn = " ",
+						Info = " ",
+						Hint = " ",
+					},
+					git = {
+						removed = " ",
+						modified = " ",
+						added = " ",
+					},
+				},
 			},
 		},
 		-- import any extras modules here

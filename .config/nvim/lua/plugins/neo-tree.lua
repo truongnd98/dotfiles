@@ -34,19 +34,27 @@ return {
 				},
 			},
 			default_component_configs = {
+				diagnostics = {
+					symbols = {
+						error = "  ",
+						warn = "  ",
+						info = "  ",
+						hint = "  ",
+					},
+				},
 				git_status = {
 					symbols = {
 						-- Change type
-						added = "✚",
-						deleted = "✖",
-						modified = "",
-						renamed = "󰁕",
+						added = "✚  ",
+						deleted = "󱎘  ",
+						modified = "∼  ",
+						renamed = "󰁕  ",
 						-- Status type
-						untracked = "?",
+						untracked = "󱈸  ",
 						ignored = "",
-						unstaged = "󰄱",
-						staged = "",
-						conflict = "",
+						unstaged = "󰄱  ",
+						staged = "󰸞  ",
+						conflict = "  ",
 					},
 				},
 			},

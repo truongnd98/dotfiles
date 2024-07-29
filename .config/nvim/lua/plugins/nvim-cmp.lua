@@ -17,7 +17,6 @@ return {
 		"onsails/lspkind.nvim", -- vs-code like pictograms
 		-- "zbirenbaum/copilot-cmp",
 		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-path",
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -65,12 +64,16 @@ return {
 					end
 				end, { "i", "s" }),
 			}),
+
 			-- sources for autocompletion
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" }, -- snippets
-				-- { name = "buffer" }, -- text within current buffer
-				{ name = "path" }, -- file system paths
+				{
+					name = "nvim_lsp",
+					group_index = 1,
+				},
+				{ name = "luasnip", group_index = 2, keyword_length = 1 }, -- snippets
+				{ name = "buffer", group_index = 3, keyword_length = 3 }, -- text within current buffer
+				{ name = "path", group_index = 1 }, -- file system paths
 				-- {
 				-- 	name = "copilot",
 				-- 	group_index = 1,

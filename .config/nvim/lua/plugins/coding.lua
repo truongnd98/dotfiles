@@ -96,9 +96,10 @@ return {
 	{
 		"nvim-cmp",
 		-- enabled = false,
-		-- dependencies = { "hrsh7th/cmp-emoji" },
+		-- event = "InsertEnter",
+		dependencies = { "hrsh7th/cmp-emoji" },
 		opts = function(_, opts)
-			-- -- table.insert(opts.sources, { name = "emoji" })
+			table.insert(opts.sources, { name = "emoji" })
 			-- local cmp = require("cmp")
 			-- opts.mapping = cmp.mapping.preset.insert({
 			-- 	["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion

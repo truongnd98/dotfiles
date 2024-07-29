@@ -5,6 +5,7 @@ return {
 	config = function()
 		local devicons = require("nvim-web-devicons")
 		require("incline").setup({
+			hide = { cursorline = true },
 			render = function(props)
 				local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
 
@@ -18,7 +19,7 @@ return {
 				local ft_icon, ft_color = devicons.get_icon_color(filename)
 
 				local function get_git_diff()
-					local icons = { removed = "", changed = "", added = "" }
+					local icons = { added = "", changed = "", removed = "" }
 					local signs = vim.b[props.buf].gitsigns_status_dict
 					local labels = {}
 					if signs == nil then
@@ -30,14 +31,14 @@ return {
 						end
 					end
 					if #labels > 0 then
-						table.insert(labels, { "┊ " })
+						table.insert(labels, { "┊ ", group = labels[#labels].group })
 					end
 					return labels
 				end
 
-				local function get_diagnostic_label()
-					local icons = { error = "", warn = "", info = "", hint = "" }
-					local label = {}
+				local function get_diagnostic_label() -- 󰋽
+					local icons = { error = "", warn = "", info = "", hint = "" }
+					local labels = {}
 
 					for severity, icon in pairs(icons) do
 						local n = #vim.diagnostic.get(
@@ -45,21 +46,24 @@ return {
 							{ severity = vim.diagnostic.severity[string.upper(severity)] }
 						)
 						if n > 0 then
-							table.insert(label, { icon .. " " .. n .. " ", group = "diagnosticsign" .. severity })
+							table.insert(labels, { icon .. " " .. n .. " ", group = "DiagnosticSign" .. severity })
 						end
 					end
-					if #label > 0 then
-						table.insert(label, { "┊ " })
+					if #labels > 0 then
+						table.insert(labels, { "┊ ", group = labels[#labels].group })
 					end
-					return label
+					return labels
 				end
 
 				return {
 					{ get_diagnostic_label() },
 					{ get_git_diff() },
 					{ (ft_icon or "") .. " ", guifg = ft_color, guibg = "none" },
-					{ filename .. " ", gui = vim.bo[props.buf].modified and "bold,italic" or "bold" },
-					{ "┊  " .. vim.api.nvim_win_get_number(props.win), group = "deviconwindows" },
+					{
+						filename .. (vim.bo[props.buf].modified and "[modified]" or "") .. " ",
+						gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
+					},
+					{ "┊  " .. vim.api.nvim_win_get_number(props.win) .. "|bf" .. props.buf, guifg = "#00A4EF" },
 				}
 			end,
 		})

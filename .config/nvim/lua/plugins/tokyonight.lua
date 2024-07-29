@@ -39,6 +39,13 @@ return {
 				hl["@module"] = { fg = c.red }
 
 				hl["Type"] = { fg = c.hint }
+
+				hl["diffAdded"] = { fg = c.hint }
+				hl["diffChanged"] = { fg = c.warning }
+
+				hl["GitSignsAdd"] = { fg = c.hint }
+				-- hl["GitSignsAdd"] = { fg = c.hint }
+				-- hl["GitSignsAdd"] = { fg = c.hint }
 			end,
 		})
 
