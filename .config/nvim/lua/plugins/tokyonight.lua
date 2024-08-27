@@ -44,8 +44,8 @@ return {
 				hl["diffChanged"] = { fg = c.warning }
 
 				hl["GitSignsAdd"] = { fg = c.hint }
-				-- hl["GitSignsAdd"] = { fg = c.hint }
-				-- hl["GitSignsAdd"] = { fg = c.hint }
+
+				hl["NeoTreeGitUntracked"] = { fg = "#00A300" }
 			end,
 		})
 

@@ -26,8 +26,8 @@ return {
         center = {
           { action = "Telescope project-manager find_projects cwd=~/Desktop/",                                    desc = " List Projects",          icon = "🍻", key = "p" },
           { action = "Telescope project-manager find_and_open_project cwd=~/Desktop/ hidden=true no_ignore=true", desc = " Open New Project",       icon = "🍺", key = "o" },
-          { action = "Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true",             desc = " Find Folder in Desktop", icon = "📂", key = "<D-d>" },
-          { action = "Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true",            desc = " Find File in Desktop",   icon = "📑", key = "<D-f>" },
+          { action = "Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true",             desc = " Find Folder in Desktop", icon = "📂", key = "<C-d>" },
+          { action = "Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true",            desc = " Find File in Desktop",   icon = "📑", key = "<C-f>" },
           -- { action = "Telescope project-manager find_files hidden=true no_ignore=true",                           desc = " Find File",              icon = "📄", key = "f" },
           { action = "ene | startinsert",                               desc = " New File",         icon = "📝",  key = "n" },
           { action = 'lua LazyVim.pick.config_files()()',               desc = " Config",           icon = "🧰",  key = "c" },
