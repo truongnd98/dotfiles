@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -78,6 +79,7 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+
 
 # Kubernetes completion
 source <(kubectl completion zsh)
@@ -198,21 +200,79 @@ alias k="kubectl"
 # ---- Helm ----
 alias h="helm"
 
-# ---- Eza completions ----
-export FPATH="$HOME/eza/completions/zsh:$FPATH"
-if type brew &>/dev/null; then
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-    autoload -Uz compinit
-    compinit
-fi
+# # ---- Eza completions ----
+# export FPATH="$HOME/eza/completions/zsh:$FPATH"
+# if type brew &>/dev/null; then
+#   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+#     autoload -Uz compinit
+#     compinit
+# fi
 
 # ---- cd command ----
 alias CD="cd"
 
+_clean_screen(){
+  if [[ $TMUX ]]; then
+    printf '\33c\e[3j' && tmux clear-history
+  else
+    printf '\33c\e[3j'
+  fi
+}
+
 # ---- Clean screen----
-# alias cls="printf \"\033c\""
-alias cls="printf '\33c\e[3j'"
+alias cls=_clean_screen
 
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# autoload -U +X bashcompinit && bashcompinit
+# complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+## Start TMUX when open terminal([ "$TERM_PROGRAM" != "vscode" ])
+if [ "$TERM_PROGRAM" != "vscode" ]; then
+  # Default
+  # Attach to the tmux session "default" if not create new tmux session "default"
+  if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach-session -t default || tmux new-session -s default
+  fi
+fi
+# # Choices
+# # Start the tmux session if not alraedy in the tmux session
+# if [[ ! -n $TMUX  ]]; then
+#   # Get the session IDs
+#   session_ids="$(tmux list-sessions)"
+#
+#   # # Create new session if no sessions exist
+#   # if [[ -z "$session_ids" ]]; then
+#   #   tmux new-session
+#   # fi
+#
+#   # Select from following choices
+#   #   - Attach existing session
+#   #   - Create new session
+#   #   - Start without tmux
+#   create_new_session="Create new session"
+#   start_without_tmux="Start without tmux"
+#   choices="$session_ids\n${create_new_session}:\n${start_without_tmux}:"
+#   choice="$(echo $choices | fzf | cut -d: -f1)"
+#
+#   if expr "$choice" : "[0-9]*$" >&/dev/null; then
+#     # Attach existing session
+#     tmux attach-session -t "$choice"
+#   elif [[ "$choice" = "${create_new_session}" ]]; then
+#     # Create new session
+#     tmux new-session
+#   elif [[ "$choice" = "${start_without_tmux}" ]]; then
+#     # Start without tmux
+#     :
+#   fi
+# fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/truongdinh/.lmstudio/bin"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/truongdinh/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions

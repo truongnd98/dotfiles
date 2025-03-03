@@ -1,10 +1,13 @@
+[general]
+import = [
+  "./key_bindings.toml"
+]
 live_config_reload = true
 
 [colors.bright]
 black = "#444b6a"
 blue = "#7da6ff"
 cyan = "#0db9d7"
-#green = "#b9f27c"
 green = "#19ac19"
 magenta = "#bb9af7"
 red = "#ff7a93"
@@ -13,14 +16,13 @@ yellow = "#ff9e64"
 
 [colors.normal]
 black = "#32344a"
-blue = "#4a80f4"
-cyan = "#00e6e6"
-#green = "#9ece6a"
-green = "#00A300"
+blue = "#0a84ff"
+cyan = "#5ac8f5"
+green = "#32d74b"
 magenta = "#ad8ee6"
-red = "#f7768e"
+red = "#ff453a"
 white = "#787c99"
-yellow = "#ff9e64"
+yellow = "#ff9f0a"
 
 [colors.primary]
 # background = "#11121D"
@@ -29,12 +31,11 @@ background = "#1F2335"
 foreground = "#FAFAFA"
 
 [env]
-TERM = "xterm-256color"
-# TERM = "xterm-kitty"
-# TERM = "alacritty"
+# TERM = "xterm-256color"
+TERM = "alacritty"
 
 [font]
-size = 14.0
+size = 15.0
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -47,25 +48,23 @@ style = "Bold Italic"
 [font.italic]
 family = "JetBrainsMono Nerd Font"
 style = "Medium Italic"
-#style = "Italic"
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"
 style = "Medium"
-# style = "Regular"
 
 [window]
-decorations = "full"
 decorations_theme_variant = "Dark"
 startup_mode = "Maximized"
+dynamic_padding = true
 
 [window.class]
 general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 5
-y = 5
+x = 1
+y = 0
 
 [scrolling]
 history = 10000
@@ -75,5 +74,5 @@ multiplier = 3
 blink_interval = 500
 
 [cursor.style]
-# shape = "Beam"
+shape = "Beam"
 blinking = "Always"

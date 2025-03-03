@@ -1,5 +1,6 @@
 return {
 	"nvim-neo-tree/neo-tree.nvim",
+  -- enabled = false,
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
@@ -67,25 +68,17 @@ return {
 		local opts = { noremap = true, silent = true }
 
 		keymap.set("n", "<leader>e", function()
-			vim.schedule(function()
-				require("neo-tree.command").execute({ toggle = false })
-			end)
+			require("neo-tree.command").execute({ toggle = false })
 		end, opts)
-		keymap.set("n", "<leader>ee", function()
-			vim.schedule(function()
-				require("neo-tree.command").execute({ toggle = true })
-			end)
+		keymap.set("n", "<leader>q", function()
+			require("neo-tree.command").execute({ toggle = true })
 		end, opts)
 
 		keymap.set("n", "<leader>E", function()
-			vim.schedule(function()
-				require("neo-tree.command").execute({ toggle = false })
-			end)
+			require("neo-tree.command").execute({ toggle = false })
 		end, opts)
-		keymap.set("n", "<leader>EE", function()
-			vim.schedule(function()
-				require("neo-tree.command").execute({ toggle = true })
-			end)
+		keymap.set("n", "<leader>Q", function()
+			require("neo-tree.command").execute({ toggle = true })
 		end, opts)
 	end,
 }

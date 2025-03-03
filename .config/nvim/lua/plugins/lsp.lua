@@ -1,152 +1,115 @@
-local go = require("lazyvim.plugins.extras.lang.go")
 return {
-	-- tools
-	{
-		"williamboman/mason.nvim",
-		opts = function(_, opts)
-			vim.list_extend(opts.ensure_installed, {
-				-- "stylua",
-				-- "selene",
-				-- "luacheck",
-				-- "shellcheck",
-				-- "shfmt",
-				-- "tailwindcss-language-server",
-				-- "typescript-language-server",
-				-- "css-lsp",
-			})
-		end,
-	},
+  {
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+    build = ":MasonUpdate",
+    opts_extend = { "ensure_installed" },
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "shfmt",
+      },
+    },
+    ---@param opts MasonSettings | {ensure_installed: string[]}
+    config = function(_, opts)
+      require("mason").setup(opts)
+      local mr = require("mason-registry")
+      mr:on("package:install:success", function()
+        vim.defer_fn(function()
+          -- trigger FileType event to possibly load this newly installed LSP server
+          require("lazy.core.handler.event").trigger({
+            event = "FileType",
+            buf = vim.api.nvim_get_current_buf(),
+          })
+        end, 100)
+      end)
 
-	-- lsp servers
-	{
-		"neovim/nvim-lspconfig",
-		init = function()
-			local keys = require("lazyvim.plugins.lsp.keymaps").get()
-			keys[#keys + 1] = {
-				"gd",
-				function()
-					-- DO NOT RESUSE WINDOW
-					require("telescope.builtin").lsp_definitions({ reuse_win = false })
-				end,
-				desc = "Goto Definition",
-				has = "definition",
-			}
-		end,
-		opts = {
-			inlay_hints = { enabled = false },
-			---@type lspconfig.options
-			servers = {
-				cssls = {},
-				tailwindcss = {
-					root_dir = function(...)
-						return require("lspconfig.util").root_pattern(".git")(...)
-					end,
-				},
-				tsserver = {
-					root_dir = function(...)
-						return require("lspconfig.util").root_pattern(".git")(...)
-					end,
-					single_file_support = false,
-					settings = {
-						typescript = {
-							inlayHints = {
-								includeInlayParameterNameHints = "literal",
-								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-								includeInlayFunctionParameterTypeHints = true,
-								includeInlayVariableTypeHints = false,
-								includeInlayPropertyDeclarationTypeHints = true,
-								includeInlayFunctionLikeReturnTypeHints = true,
-								includeInlayEnumMemberValueHints = true,
-							},
-						},
-						javascript = {
-							inlayHints = {
-								includeInlayParameterNameHints = "all",
-								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-								includeInlayFunctionParameterTypeHints = true,
-								includeInlayVariableTypeHints = true,
-								includeInlayPropertyDeclarationTypeHints = true,
-								includeInlayFunctionLikeReturnTypeHints = true,
-								includeInlayEnumMemberValueHints = true,
-							},
-						},
-					},
-				},
-				html = {},
-				yamlls = {
-					settings = {
-						yaml = {
-							keyOrdering = false,
-						},
-					},
-				},
-				lua_ls = {
-					-- enabled = false,
-					single_file_support = true,
-					settings = {
-						Lua = {
-							workspace = {
-								checkThirdParty = false,
-							},
-							completion = {
-								workspaceWord = true,
-								callSnippet = "Both",
-							},
-							misc = {
-								parameters = {
-									-- "--log-level=trace",
-								},
-							},
-							hint = {
-								enable = true,
-								setType = false,
-								paramType = true,
-								paramName = "Disable",
-								semicolon = "Disable",
-								arrayIndex = "Disable",
-							},
-							doc = {
-								privateName = { "^_" },
-							},
-							type = {
-								castNumberToInteger = true,
-							},
-							diagnostics = {
-								disable = { "incomplete-signature-doc", "trailing-space" },
-								-- enable = false,
-								groupSeverity = {
-									strong = "Warning",
-									strict = "Warning",
-								},
-								groupFileStatus = {
-									["ambiguity"] = "Opened",
-									["await"] = "Opened",
-									["codestyle"] = "None",
-									["duplicate"] = "Opened",
-									["global"] = "Opened",
-									["luadoc"] = "Opened",
-									["redefined"] = "Opened",
-									["strict"] = "Opened",
-									["strong"] = "Opened",
-									["type-check"] = "Opened",
-									["unbalanced"] = "Opened",
-									["unused"] = "Opened",
-								},
-								unusedLocalExclude = { "_*" },
-							},
-							format = {
-								enable = false,
-								defaultConfig = {
-									indent_style = "space",
-									indent_size = "2",
-									continuation_indent_size = "2",
-								},
-							},
-						},
-					},
-				},
-			},
-			setup = {},
-		},
-	},
+      mr.refresh(function()
+        for _, tool in ipairs(opts.ensure_installed) do
+          local p = mr.get_package(tool)
+          if not p:is_installed() then
+            p:install()
+          end
+        end
+      end)
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    lazy = false,
+    opts = {
+      auto_install = true,
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local lspconfig = require("lspconfig")
+      -- lua
+      lspconfig.lua_ls.setup({
+          capabilities = capabilities,
+          settings = {
+              Lua = {
+                  diagnostics = {
+                      globals = { "vim" },
+                  },
+                  workspace = {
+                      library = vim.api.nvim_get_runtime_file("", true),
+                      checkThirdParty = false,
+                  },
+                  telemetry = {
+                      enable = false,
+                  },
+              },
+          },
+      })
+      -- typescript
+      lspconfig.ts_ls.setup({
+          capabilities = capabilities,
+      })
+      -- Js
+      lspconfig.eslint.setup({
+          capabilities = capabilities,
+      })
+      -- yaml
+      lspconfig.yamlls.setup({
+          capabilities = capabilities,
+      })
+      -- -- tailwindcss
+      -- lspconfig.tailwindcss.setup({
+      --     capabilities = capabilities,
+      -- })
+      -- golang
+      lspconfig.gopls.setup({
+          capabilities = capabilities,
+      })
+      -- -- golangci lint
+      -- lspconfig.golangci_lint_ls.setup({
+      --   capabilities = capabilities,
+      -- })
+      -- lsp kepmap setting
+      vim.keymap.set("n", "<tab><tab>", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
+      vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
+      vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+      -- list all methods in a file
+      -- working with go confirmed, don't know about other, keep changing as necessary
+      vim.keymap.set("n", "<leader>fm", function()
+          local filetype = vim.bo.filetype
+          local symbols_map = {
+              javascript = "function",
+              typescript = "function",
+              lua = "function",
+              go = { "method", "struct", "interface" },
+          }
+          local symbols = symbols_map[filetype] or "function"
+          require("telescope.builtin").lsp_document_symbols({ symbols = symbols })
+      end, {})
+    end
+  }
 }

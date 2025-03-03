@@ -37,6 +37,10 @@ return {
 					luasnip.lsp_expand(args.body)
 				end,
 			},
+    --   window = {
+				-- completion = cmp.config.window.bordered(),
+				-- documentation = cmp.config.window.bordered(),
+    --   },
 			mapping = cmp.mapping.preset.insert({
 				["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
 				["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
@@ -74,6 +78,9 @@ return {
 				{ name = "luasnip", group_index = 2, keyword_length = 1 }, -- snippets
 				{ name = "buffer", group_index = 3, keyword_length = 3 }, -- text within current buffer
 				{ name = "path", group_index = 1 }, -- file system paths
+				{ name = "gci", group_index = 1 },
+				{ name = "ts_ls", group_index = 1 },
+				{ name = "gopls", group_index = 1 },
 				-- {
 				-- 	name = "copilot",
 				-- 	group_index = 1,
