@@ -8,11 +8,11 @@ return {
 		"nvim-telescope/telescope.nvim",
 	},
 	keys = {
-		{
-			"<leader>d",
-			"<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
-			desc = "",
-		},
+		-- {
+		-- 	"<leader>d",
+		-- 	"<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
+		-- 	desc = "",
+		-- },
 	},
 	config = function()
 		require("project-manager").setup({

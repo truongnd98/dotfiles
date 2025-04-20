@@ -49,33 +49,33 @@ return {
       local lspconfig = require("lspconfig")
       -- lua
       lspconfig.lua_ls.setup({
-          capabilities = capabilities,
-          settings = {
-              Lua = {
-                  diagnostics = {
-                      globals = { "vim" },
-                  },
-                  workspace = {
-                      library = vim.api.nvim_get_runtime_file("", true),
-                      checkThirdParty = false,
-                  },
-                  telemetry = {
-                      enable = false,
-                  },
-              },
+        capabilities = capabilities,
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = {
+              enable = false,
+            },
           },
+        },
       })
       -- typescript
       lspconfig.ts_ls.setup({
-          capabilities = capabilities,
+        capabilities = capabilities,
       })
       -- Js
       lspconfig.eslint.setup({
-          capabilities = capabilities,
+        capabilities = capabilities,
       })
       -- yaml
       lspconfig.yamlls.setup({
-          capabilities = capabilities,
+        capabilities = capabilities,
       })
       -- -- tailwindcss
       -- lspconfig.tailwindcss.setup({
@@ -83,33 +83,33 @@ return {
       -- })
       -- golang
       lspconfig.gopls.setup({
-          capabilities = capabilities,
+        capabilities = capabilities,
       })
       -- -- golangci lint
       -- lspconfig.golangci_lint_ls.setup({
       --   capabilities = capabilities,
       -- })
       -- lsp kepmap setting
-      vim.keymap.set("n", "<tab><tab>", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "<leader>i", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
       vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
+      -- vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
       vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
-      -- list all methods in a file
-      -- working with go confirmed, don't know about other, keep changing as necessary
-      vim.keymap.set("n", "<leader>fm", function()
-          local filetype = vim.bo.filetype
-          local symbols_map = {
-              javascript = "function",
-              typescript = "function",
-              lua = "function",
-              go = { "method", "struct", "interface" },
-          }
-          local symbols = symbols_map[filetype] or "function"
-          require("telescope.builtin").lsp_document_symbols({ symbols = symbols })
-      end, {})
+      -- -- list all methods in a file
+      -- -- working with go confirmed, don't know about other, keep changing as necessary
+      -- vim.keymap.set("n", "<leader>fm", function()
+      --   local filetype = vim.bo.filetype
+      --   local symbols_map = {
+      --     javascript = "function",
+      --     typescript = "function",
+      --     lua = "function",
+      --     go = { "method", "struct", "interface" },
+      --   }
+      --   local symbols = symbols_map[filetype] or "function"
+      --   require("telescope.builtin").lsp_document_symbols({ symbols = symbols })
+      -- end, {})
     end
   }
 }

@@ -61,50 +61,50 @@ return {
 				"<cmd>Telescope project-manager live_grep hidden=true no_ignore=true<cr>",
 				{ desc = "Find string in cwd" }
 			)
-			keymap.set(
-				"n",
-				"<leader>fc",
-				"<cmd>Telescope project-manager grep_string hidden=true no_ignore=true<cr>",
-				{ desc = "Find string under cursor in cwd" }
-			)
-			keymap.set(
-				"n",
-				"<leader>fd",
-				"<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
-				{ desc = "Fuzzy find files in Desktop" }
-			)
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>fc",
+			-- 	"<cmd>Telescope project-manager grep_string hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Find string under cursor in cwd" }
+			-- )
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>fd",
+			-- 	"<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Fuzzy find files in Desktop" }
+			-- )
+			--
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>d",
+			-- 	"<cmd>Telescope project-manager find_dirs hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Fuzzy find folder in cwd" }
+			-- )
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>dd",
+			-- 	"<cmd>Telescope project-manager live_find_dirs hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Fuzzy live find folder in cwd" }
+			-- )
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>ds",
+			-- 	"<cmd>Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Fuzzy find folder in Desktop" }
+			-- )
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>df",
+			-- 	"<cmd>Telescope project-manager live_find_dirs cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
+			-- 	{ desc = "Fuzzy live find folder in Desktop" }
+			-- )
 
-			keymap.set(
-				"n",
-				"<leader>d",
-				"<cmd>Telescope project-manager find_dirs hidden=true no_ignore=true<cr>",
-				{ desc = "Fuzzy find folder in cwd" }
-			)
-			keymap.set(
-				"n",
-				"<leader>dd",
-				"<cmd>Telescope project-manager live_find_dirs hidden=true no_ignore=true<cr>",
-				{ desc = "Fuzzy live find folder in cwd" }
-			)
-			keymap.set(
-				"n",
-				"<leader>ds",
-				"<cmd>Telescope project-manager find_dirs cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
-				{ desc = "Fuzzy find folder in Desktop" }
-			)
-			keymap.set(
-				"n",
-				"<leader>df",
-				"<cmd>Telescope project-manager live_find_dirs cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
-				{ desc = "Fuzzy live find folder in Desktop" }
-			)
-
-			keymap.set(
-				"n",
-				"<leader>p",
-				"<cmd>Telescope project-manager find_projects cwd=~/Desktop/<cr>",
-				{ desc = "Find projects" }
-			)
+			-- keymap.set(
+			-- 	"n",
+			-- 	"<leader>p",
+			-- 	"<cmd>Telescope project-manager find_projects cwd=~/Desktop/<cr>",
+			-- 	{ desc = "Find projects" }
+			-- )
 
 			-- disable keymap <leader><leader>
 			keymap.set("n", "<leader><leader>", "<nop>", { desc = "Disable <leader><leader>", nowait = true })

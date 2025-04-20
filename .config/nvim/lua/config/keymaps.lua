@@ -123,18 +123,14 @@ vim.keymap.set("n", "K", ":m -2<cr>==")
 vim.keymap.set("n", "J", ":m +1<cr>==")
 
 -- Quickfix
-local function isQuickfixOpened()
-  return 1
-end
-keymap.set("n", "n", function ()
-  if not isQuickfixOpened() then return end
+keymap.set("n", "qn", function ()
   pcall(function ()
     vim.cmd("cnext")
   end)
 end)
-keymap.set("n", "N", function ()
-  if not isQuickfixOpened() then return end
+keymap.set("n", "qp", function ()
   pcall(function ()
     vim.cmd("cpre")
   end)
 end)
+keymap.set("n", "qf", ":cfirst<cr>")

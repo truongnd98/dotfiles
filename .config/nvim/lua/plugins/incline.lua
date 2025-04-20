@@ -60,14 +60,18 @@ return {
 					{ get_git_diff() },
 					{ (ft_icon or "") .. " ", guifg = ft_color, guibg = "none" },
 					{
-						filename .. (vim.bo[props.buf].modified and "[modified]" or "") .. " ",
+						filename,
 						gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
 					},
 					{
-						"┊  " .. vim.api.nvim_win_get_number(props.win) .. "| " .. props.buf,
-						guifg = "#00A4EF",
-						gui = "bold",
+					  vim.bo[props.buf].modified and "[modified]" or "",
+						gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
 					},
+					-- {
+					-- 	"┊  " .. vim.api.nvim_win_get_number(props.win) .. "| " .. props.buf,
+					-- 	guifg = "#00A4EF",
+					-- 	gui = "bold",
+					-- },
 				}
 			end,
 		})
