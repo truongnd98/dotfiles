@@ -62,9 +62,12 @@ return {
             ["?"] = "show_help",
             ["<"] = "prev_source",
             [">"] = "next_source",
+            ["H"] = "toggle_hidden",
 					},
 				},
 			},
+      enable_diagnostics = false,
+      -- enable_git_status = false,
 			default_component_configs = {
 				diagnostics = {
 					symbols = {

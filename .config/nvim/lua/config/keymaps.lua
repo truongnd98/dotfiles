@@ -127,10 +127,16 @@ keymap.set("n", "qn", function ()
   pcall(function ()
     vim.cmd("cnext")
   end)
-end)
+end, { desc = "Goto previous item quickfix list" })
 keymap.set("n", "qp", function ()
   pcall(function ()
     vim.cmd("cpre")
   end)
-end)
-keymap.set("n", "qf", ":cfirst<cr>")
+end, { desc = "Goto previous item quickfix list" })
+keymap.set("n", "qf", ":cfirst<cr>", { desc = "Goto first item quickfix list" })
+
+-- Diagnostic
+keymap.set("n", "<leader>s", vim.diagnostic.open_float, { desc = "Show diagnostic error" })
+
+-- Remove highlight
+keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Remove highlight" })

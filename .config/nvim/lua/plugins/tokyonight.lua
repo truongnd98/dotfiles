@@ -18,7 +18,6 @@ return {
         c["white"] = "#787c99"
         c["yellow"] = "#ff9f0a"
 			end,
-
 			on_highlights = function(hl, c)
 				hl.Visual = { bg = c.bg_visual, reverse = true } -- Visual mode selection
 				hl.VisualNOS = { bg = c.bg_visual, reverse = true } -- Visual mode selection when vim is "Not Owning the Selection".
@@ -47,6 +46,19 @@ return {
 				--
 				-- hl["NeoTreeGitUntracked"] = { fg = "#00A300" }
 				-- hl["NeoTreeGitUntracked"] = { fg = "#4fd6be" }
+
+        hl["GitSignsAdd"] = { fg = c["green"] }
+        hl["GitSignsDelete"] = { fg = c["red"] }
+        hl["GitSignsChange"] = { fg = c["yellow"] }
+        hl["GitSignsChangedelete"] = { fg = c["red"] }
+        hl["GitSignsUntracked"] = { fg = c["white"] }
+
+        hl["SpellBad"] = { bg="#273849" , undercurl = true, sp = "#B8DB87" }
+
+        hl["PmenuSel"] = { bg = c.bg_visual, reverse = true }
+        hl["CmpItemAbbrMatch"] = { fg = c.blue }
+
+        hl["WinSeparator"] = { bg = "#1F2335", fg = "#565F89"  }
 			end,
 		})
 

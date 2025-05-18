@@ -45,11 +45,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
       local lspconfig = require("lspconfig")
       -- lua
       lspconfig.lua_ls.setup({
-        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = {
@@ -66,29 +64,15 @@ return {
         },
       })
       -- typescript
-      lspconfig.ts_ls.setup({
-        capabilities = capabilities,
-      })
+      lspconfig.ts_ls.setup({})
       -- Js
-      lspconfig.eslint.setup({
-        capabilities = capabilities,
-      })
-      -- yaml
-      lspconfig.yamlls.setup({
-        capabilities = capabilities,
-      })
-      -- -- tailwindcss
-      -- lspconfig.tailwindcss.setup({
-      --     capabilities = capabilities,
-      -- })
+      lspconfig.eslint.setup({})
+      -- -- yaml
+      -- lspconfig.yamlls.setup({})
       -- golang
-      lspconfig.gopls.setup({
-        capabilities = capabilities,
-      })
+      lspconfig.gopls.setup({})
       -- -- golangci lint
-      -- lspconfig.golangci_lint_ls.setup({
-      --   capabilities = capabilities,
-      -- })
+      -- lspconfig.golangci_lint_ls.setup({})
       -- lsp kepmap setting
       vim.keymap.set("n", "<leader>i", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})

@@ -1,7 +1,7 @@
 return {
-	-- "norcalli/nvim-colorizer.lua",
-	-- -- enable = false,
-	-- opts = {
-	-- 	"*",
-	-- },
+	"norcalli/nvim-colorizer.lua",
+	-- enable = false,
+	opts = {
+		"*",
+	},
 }
