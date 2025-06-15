@@ -1,5 +1,5 @@
 if vim.loader then
-vim.loader.enable()
+  vim.loader.enable()
 end
 
 _G.dd = function(...)

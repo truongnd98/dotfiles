@@ -6,7 +6,7 @@ return {
   opts = {
     snippets = {
       preset = "luasnip",
-      search_paths = { vim.g.vscode_snippets_path },
+      -- search_paths = { vim.g.vscode_snippets_path },
     },
     keymap = {
       ["<Tab>"] = { "select_next", "fallback" },

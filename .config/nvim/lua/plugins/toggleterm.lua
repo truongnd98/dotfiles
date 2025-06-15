@@ -31,6 +31,7 @@ return {
   },
   config = function()
     require("toggleterm").setup({
+      shade_terminals = false,
       auto_scroll = false,
       autochdir = true,
       on_open = function(term)

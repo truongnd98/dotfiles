@@ -12,7 +12,7 @@ return {
       hide_root_node = true,
       use_default_mappings = false,
       buffers = {
-        -- bind_to_cwd = false,
+        bind_to_cwd = false,
       },
 			filesystem = {
 				filtered_items = {
@@ -34,7 +34,7 @@ return {
 					enabled = true,
 					leave_dirs_open = true,
 				},
-        -- bind_to_cwd = false,
+        bind_to_cwd = false,
 				use_libuv_file_watcher = true,
 				window = {
 					mappings = {

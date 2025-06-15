@@ -101,6 +101,8 @@ fi
 
 alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
+alias edit-nvim="nvim ~/.config/nvim/"
+alias edit-dotfile="nvim ~/Desktop/personal-dev-config/dotfiles/.config/"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -229,14 +231,14 @@ export NVM_DIR="$HOME/.nvm"
 # autoload -U +X bashcompinit && bashcompinit
 # complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
-## Start TMUX when open terminal([ "$TERM_PROGRAM" != "vscode" ])
-if [ "$TERM_PROGRAM" != "vscode" ]; then
-  # Default
-  # Attach to the tmux session "default" if not create new tmux session "default"
-  if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach-session -t default || tmux new-session -s default
-  fi
-fi
+# ## Start TMUX when open terminal([ "$TERM_PROGRAM" != "vscode" ])
+# if [ "$TERM_PROGRAM" != "vscode" ]; then
+#   # Default
+#   # Attach to the tmux session "default" if not create new tmux session "default"
+#   if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+#     tmux attach-session -t default || tmux new-session -s default
+#   fi
+# fi
 # # Choices
 # # Start the tmux session if not alraedy in the tmux session
 # if [[ ! -n $TMUX  ]]; then
@@ -269,10 +271,10 @@ fi
 #   fi
 # fi
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/truongdinh/.lmstudio/bin"
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/truongdinh/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
+# # Added by LM Studio CLI (lms)
+# export PATH="$PATH:/Users/truongdinh/.lmstudio/bin"
+# # The following lines have been added by Docker Desktop to enable Docker CLI completions.
+# fpath=(/Users/truongdinh/.docker/completions $fpath)
+# autoload -Uz compinit
+# compinit
+# # End of Docker CLI completions

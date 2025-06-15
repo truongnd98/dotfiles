@@ -20,11 +20,18 @@ return {
   opts = function()
     vim.o.laststatus = vim.g.lualine_laststatus
 
+    local getIMEngine = require("util.im").getIMEngine()
+
     local opts = {
       options = {
         theme = "auto",
         globalstatus = vim.o.laststatus == 3,
         disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
+        refresh = {
+          statusline = 300,
+          tabline = 300,
+          winbar = 300,
+        },
       },
       sections = {
         lualine_a = { "mode" },
@@ -50,6 +57,7 @@ return {
           },
           {
             "diff",
+            separator = "",
             symbols = {
               added = " ",
               modified = " ",
@@ -76,6 +84,15 @@ return {
           {"pretty_path"}
         },
         lualine_x = {
+          {
+            function ()
+              local IMEngine = getIMEngine()
+              return IMEngine and "IM:" .. IMEngine
+            end,
+            color = {
+              fg = "#00a4ef",
+            },
+          },
           {
             "encoding",
             color = {

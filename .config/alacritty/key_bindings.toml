@@ -3,5 +3,5 @@ bindings = [
   { key = "F", mods = "Command", action = "ReceiveChar" },
   { key = "B", mods = "Command", action = "ReceiveChar" },
   { key = "T", mods = "Command", action = "ReceiveChar" },
-  # { key = "N", mods = "Command", action = "ReceiveChar" }
+  { key = "N", mods = "Command", action = "ReceiveChar" },
 ]
