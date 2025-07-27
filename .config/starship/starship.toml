@@ -8,9 +8,9 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 
 [git_status]
-format = '([\[$modified$untracked$deleted$ahead_behind\]]($style)(\( $staged\)) )'
+format = '([\[$modified$untracked$deleted$ahead_behind\]]($style)( $staged) )'
 style = 'bold green'
-staged = '*[$count](green)'
+staged = '[✓$count](green)'
 untracked = '[+$count](green)'
 modified = '[~$count](yellow)'
 deleted = '[-$count](red)'
