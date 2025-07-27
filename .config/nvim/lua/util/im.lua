@@ -5,8 +5,7 @@ local M = {
 local IM_EN = "com.apple.keylayout.ABC"
 local IM_VN = "com.apple.inputmethod.VietnameseIM.VietnameseTelex"
 
-
-function M.loadCurrentEngine()
+function M.loadCurrentEngine(cb)
     local stdout = vim.loop.new_pipe(false)
     local stdout_chunks = {}
     local handle
@@ -28,6 +27,10 @@ function M.loadCurrentEngine()
         end
 
         M.current_engine = "UNKNOW"
+
+        if cb then
+          cb(M.current_engine)
+        end
       end
     end)
     -- Read STDOUT
@@ -50,12 +53,7 @@ function M.getIMEngine()
   end, 0.5, true)
 end
 
-
 function M.offIM()
-  if M.current_engine == "EN" then
-    return
-  end
-
   local handle
   handle = vim.loop.spawn("im-select", { args = { IM_EN } }, function (code, _signal)
     handle:close()

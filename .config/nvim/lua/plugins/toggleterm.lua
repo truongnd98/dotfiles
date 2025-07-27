@@ -1,5 +1,6 @@
 return {
   "akinsho/nvim-toggleterm.lua",
+  enabled = false,
   keys = {
     {
       "<leader>t",

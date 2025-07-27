@@ -119,6 +119,7 @@ keymap.set("n", "<C-l>", ":blast<cr>")
 --Move selected lines
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv")
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
+
 vim.keymap.set("n", "K", ":m -2<cr>==")
 vim.keymap.set("n", "J", ":m +1<cr>==")
 

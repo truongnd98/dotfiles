@@ -20,8 +20,6 @@ return {
   opts = function()
     vim.o.laststatus = vim.g.lualine_laststatus
 
-    local getIMEngine = require("util.im").getIMEngine()
-
     local opts = {
       options = {
         theme = "auto",
@@ -84,15 +82,6 @@ return {
           {"pretty_path"}
         },
         lualine_x = {
-          {
-            function ()
-              local IMEngine = getIMEngine()
-              return IMEngine and "IM:" .. IMEngine
-            end,
-            color = {
-              fg = "#00a4ef",
-            },
-          },
           {
             "encoding",
             color = {

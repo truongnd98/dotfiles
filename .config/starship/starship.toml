@@ -1,0 +1,23 @@
+# ~/.config/starship.toml
+'$schema' = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+[character]
+success_symbol = '[➜](bold green) '
+error_symbol = '[➜](bold red) '
+
+[git_status]
+format = '([\[$modified$untracked$deleted$ahead_behind\]]($style)(\( $staged\)) )'
+style = 'bold green'
+staged = '*[$count](green)'
+untracked = '[+$count](green)'
+modified = '[~$count](yellow)'
+deleted = '[-$count](red)'
+
+[git_commit]
+format = '[\([$hash](bold bright-black)[$tag](bold green)\)]($style) '
+only_detached = false
+tag_disabled = false
+tag_symbol = ' #'
+style = 'bold white'

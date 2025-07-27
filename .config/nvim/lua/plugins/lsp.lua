@@ -1,6 +1,7 @@
 return {
   {
     "williamboman/mason.nvim",
+    enabled = false,
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
@@ -37,6 +38,7 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
+    enabled = false,
     lazy = false,
     opts = {
       auto_install = true,
@@ -44,6 +46,7 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    enabled = false,
     config = function()
       local lspconfig = require("lspconfig")
       -- lua

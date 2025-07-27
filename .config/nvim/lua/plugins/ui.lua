@@ -2,7 +2,7 @@ return {
 	-- animations
 	{
 		"echasnovski/mini.animate",
-    -- enabled = false,
+    enabled = false,
 		event = "VeryLazy",
 		opts = function(_, opts)
 			opts.scroll = {
@@ -22,7 +22,7 @@ return {
 
 	{
 		"folke/zen-mode.nvim",
-    -- enabled = false,
+    enabled = false,
 		cmd = "ZenMode",
 		opts = {
 			plugins = {

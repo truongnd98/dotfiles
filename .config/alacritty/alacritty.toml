@@ -35,7 +35,7 @@ foreground = "#FAFAFA"
 TERM = "alacritty"
 
 [font]
-size = 15.0
+size = 12.0
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -63,16 +63,16 @@ general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 1
+x = 4
 y = 0
 
 [scrolling]
 history = 10000
-multiplier = 3
+multiplier = 1
 
 [cursor]
 blink_interval = 500
 
 [cursor.style]
-shape = "Beam"
+# shape = "Beam"
 blinking = "Always"

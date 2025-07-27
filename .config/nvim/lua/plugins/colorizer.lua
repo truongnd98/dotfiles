@@ -1,6 +1,6 @@
 return {
 	"norcalli/nvim-colorizer.lua",
-	-- enable = false,
+	enabled = false,
 	opts = {
 		"*",
 	},
