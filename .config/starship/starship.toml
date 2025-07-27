@@ -11,7 +11,7 @@ error_symbol = '[➜](bold red) '
 format = 'git:[$branch(:$remote_branch)]($style)'
 
 [git_status]
-format = '(([\[$modified$untracked$deleted$ahead_behind\]]($style))([\($staged\)]($style)) )'
+format = '(([\[$modified$untracked$deleted$ahead_behind\]]($style))([\($staged\)]($style))) '
 style = 'bold white'
 staged = '[✓$count](green)'
 untracked = '[+$count](green)'
