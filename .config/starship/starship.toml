@@ -7,17 +7,20 @@ add_newline = false
 success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 
+[git_branch]
+format = 'git:[$branch(:$remote_branch)]($style)'
+
 [git_status]
-format = '([\[$modified$untracked$deleted$ahead_behind\]]($style)( $staged) )'
-style = 'bold green'
+format = '(([\[$modified$untracked$deleted$ahead_behind\]]($style))([\($staged\)]($style)) )'
+style = 'bold white'
 staged = '[✓$count](green)'
 untracked = '[+$count](green)'
-modified = '[~$count](yellow)'
+modified = '[!$count](yellow)'
 deleted = '[-$count](red)'
 
 [git_commit]
-format = '[\([$hash](bold bright-black)[$tag](bold green)\)]($style) '
+format = '[\([$hash](bold bright-black)[$tag](bold green)\)]($style)'
 only_detached = false
 tag_disabled = false
-tag_symbol = ' #'
+tag_symbol = '#'
 style = 'bold white'
