@@ -1,7 +1,9 @@
 return {
 	"norcalli/nvim-colorizer.lua",
-	enabled = false,
 	opts = {
 		"*",
+    "!javascript",
+    "!typescript",
+    "!golang",
 	},
 }

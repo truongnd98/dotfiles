@@ -1,5 +1,3 @@
-local im = require("util.im")
-
 return {
   "b0o/incline.nvim",
   enabled = false,
@@ -7,7 +5,6 @@ return {
   config = function()
     local devicons = require("nvim-web-devicons")
 
-    local getIMEngine = im.getIMEngine()
     require("incline").setup({
       hide = { cursorline = true },
       debounce_threshold = { rising = 10, falling = 50 },
@@ -68,13 +65,7 @@ return {
           return labels
         end
 
-        local IMEngine = getIMEngine()
-
         return {
-          {
-            IMEngine and ("IM:" .. IMEngine .. " ┊ "),
-            guifg = "#00a4ef",
-          },
           { get_diagnostic_label() },
           { get_git_diff() },
           { (ft_icon or "") .. " ", guifg = ft_color, guibg = "none" },

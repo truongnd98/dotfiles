@@ -301,7 +301,7 @@ zi light starship/starship
 #
 ### Zinit load plugin START
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
-# zi ice wait lucid
+zi ice wait lucid
 zi light zsh-users/zsh-autosuggestions
 bindkey "^ " autosuggest-accept
 zi ice wait lucid

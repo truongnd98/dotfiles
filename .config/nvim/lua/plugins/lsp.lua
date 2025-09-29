@@ -1,7 +1,7 @@
 return {
   {
     "williamboman/mason.nvim",
-    enabled = false,
+    -- enabled = false,
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
@@ -38,7 +38,7 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    enabled = false,
+    -- enabled = false,
     lazy = false,
     opts = {
       auto_install = true,
@@ -46,11 +46,13 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    enabled = false,
+    -- enabled = false,
     config = function()
-      local lspconfig = require("lspconfig")
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- lua
-      lspconfig.lua_ls.setup({
+      vim.lsp.enable("lua_ls")
+      vim.lsp.config["lua_ls"] = {
+        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = {
@@ -65,17 +67,23 @@ return {
             },
           },
         },
-      })
+      }
       -- typescript
-      lspconfig.ts_ls.setup({})
+      vim.lsp.enable("ts_ls")
+      vim.lsp.config["ts_ls"] = {
+        capabilities = capabilities,
+      }
       -- Js
-      lspconfig.eslint.setup({})
-      -- -- yaml
-      -- lspconfig.yamlls.setup({})
+      vim.lsp.enable("eslint")
+      -- yaml
+      vim.lsp.enable("yamlls")
       -- golang
-      lspconfig.gopls.setup({})
-      -- -- golangci lint
-      -- lspconfig.golangci_lint_ls.setup({})
+      vim.lsp.enable("gopls")
+      vim.lsp.config["gopls"] = {
+        capabilities = capabilities,
+      }
+      -- golangci lint
+      vim.lsp.enable("golangci_lint_ls")
       -- lsp kepmap setting
       vim.keymap.set("n", "<leader>i", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})

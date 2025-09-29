@@ -3,12 +3,18 @@
 
 add_newline = false
 
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
 [character]
-success_symbol = '[➜](bold green) '
-error_symbol = '[➜](bold red) '
+success_symbol = '[➜](bold green)'
+error_symbol = '[➜](bold red)'
 
 [git_branch]
-format = 'git:[$branch(:$remote_branch)]($style)'
+format = '[git]($style):[$branch(:$remote_branch)](bold green)'
 
 [git_status]
 format = '(([\[$modified$untracked$deleted$ahead_behind\]]($style))([\($staged\)]($style))) '

@@ -1,16 +1,16 @@
--- -- disable netrw at the very start of your init.lua
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = " "
--- vim.g.autoformat = false
+vim.g.autoformat = false
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = "number"
+-- vim.opt.relativenumber = true
+-- vim.opt.signcolumn = "number"
 
 vim.opt.title = true
 vim.opt.autoindent = true
@@ -33,7 +33,7 @@ vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.wrap = false -- No Wrap lines
 vim.opt.backspace = { "start", "eol", "indent" }
-vim.opt.path:append({ "**" }) -- Finding files - Search down into subfolders
+-- vim.opt.path:append({ "**" }) -- Finding files - Search down into subfolders
 vim.opt.wildignore:append({ "*/node_modules/*" })
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitright = true -- Put new windows right of current
@@ -60,24 +60,6 @@ vim.opt.spelllang = { "en_us" }
 
 vim.opt.updatetime = 300
 
--- vim.g.terminal_color_0 = "#444b6a"
--- vim.g.terminal_color_1 = "#ff7a93"
--- vim.g.terminal_color_2 = "#19ac19"
--- vim.g.terminal_color_3 = "#ff9e64"
--- vim.g.terminal_color_4 = "#7da6ff"
--- vim.g.terminal_color_5 = "#bb9af7"
--- vim.g.terminal_color_6 = "#0db9d7"
--- vim.g.terminal_color_7 = "#acb0d0"
---
--- vim.g.terminal_color_8 = "#32344a"
--- vim.g.terminal_color_9 = "#ff453a"
--- vim.g.terminal_color_10 = "#32d74b"
--- vim.g.terminal_color_11 = "#ff9f0a"
--- vim.g.terminal_color_12 = "#0a84ff"
--- vim.g.terminal_color_13 = "#ad8ee6"
--- vim.g.terminal_color_14 = "#5ac8f5"
--- vim.g.terminal_color_15 = "#787c99"
-
 -- Add asterisks in block comments
 vim.opt.formatoptions:append({ "r" })
 
@@ -87,3 +69,5 @@ g.loaded_python3_provider = 0
 g.loaded_ruby_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
+
+g.lazyvim_blink_main = false

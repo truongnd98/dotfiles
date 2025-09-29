@@ -28,15 +28,15 @@ require("lazy").setup({
 	performance = {
 		cache = {
 			enabled = true,
-			-- disable_events = {},
+			disable_events = {},
 		},
 		rtp = {
 			-- disable some rtp plugins
 			disabled_plugins = {
 				"gzip",
-				-- "matchit",
-				-- "matchparen",
-				-- "netrwPlugin",
+				"matchit",
+				"matchparen",
+				"netrwPlugin",
 				"rplugin",
 				"tarPlugin",
 				"tohtml",
@@ -47,7 +47,7 @@ require("lazy").setup({
 	},
 	ui = {
 		custom_keys = {
-			["<localleader>d"] = function(plugin)
+			["<leader>d"] = function(plugin)
 				dd(plugin)
 			end,
 		},
@@ -67,4 +67,8 @@ require("lazy").setup({
 		},
 	},
 	debug = false,
+  profiling = {
+    loader = false,
+    require = true,
+  },
 })

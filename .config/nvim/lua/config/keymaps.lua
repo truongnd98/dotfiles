@@ -54,33 +54,30 @@ local escape_chars = function(string)
 	})
 end
 keymap.set("v", "<leader>h", function()
-	local _, csrow, cscol, cerow, cecol
-	_, csrow, cscol, _ = table.unpack(vim.fn.getpos("."))
-	_, cerow, cecol, _ = table.unpack(vim.fn.getpos("v"))
+	local _, start_line, start_col, end_line, end_col 
+	_, start_line, start_col, _ = unpack(vim.fn.getpos("."))
+	_, end_line, end_col, _ = unpack(vim.fn.getpos("v"))
+
+  if start_line ~= end_line then
+    return
+  end
 
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
 
-	if cerow < csrow then
-		csrow, cerow = cerow, csrow
-	end
-	if cecol < cscol then
-		cscol, cecol = cecol, cscol
-	end
-	local lines = vim.fn.getline(csrow, cerow)
-	local n = tbl_length(lines)
-	if n <= 0 then
-		return
-	end
-	lines[n] = string.sub(lines[n], 1, cecol)
-	lines[1] = string.sub(lines[1], cscol)
+  -- Make sure selection is from left to right
+  if start_col > end_col then
+    start_col, end_col = end_col, start_col
+  end
 
-	local text_selected = table.concat(lines, "\\n")
-	local text_replace = table.concat(lines, "\\r")
+  -- Get the selected line
+  local line = vim.fn.getline(start_line)
 
-	text_selected = escape_chars(text_selected)
-	text_replace = escape_chars(text_replace)
+  -- Only return the selected range from the first line
+  local selected_text = string.sub(line, start_col, end_col)
 
-	local replace_cmd = ":%s/" .. text_selected .. "/" .. text_replace
+	selected_text = escape_chars(selected_text)
+
+	local replace_cmd = ":%s/\\C" .. selected_text .. "/" .. selected_text 
 	vim.api.nvim_feedkeys(replace_cmd, "n", true)
 end)
 

@@ -1,6 +1,5 @@
 return {
   "lewis6991/gitsigns.nvim",
-  enabled = false,
   event = "VeryLazy",
   opts = {
     signs = {
@@ -20,10 +19,6 @@ return {
       topdelete = { text = "‾" },
       changedelete = { text = "~" },
       untracked = { text = "~" },
-    },
-    current_line_blame = true,
-    current_line_blame_opts = {
-      delay = 300,
     },
   },
 }
