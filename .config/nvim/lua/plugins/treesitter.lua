@@ -1,8 +1,7 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-    -- enabled = false,
-    branch = "master",
+    branch = "main",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
 		opts = {
@@ -33,7 +32,7 @@ return {
       },
 		},
 		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
+			-- require("nvim-treesitter.configs").setup(opts)
 
 			-- MDX
 			vim.filetype.add({
