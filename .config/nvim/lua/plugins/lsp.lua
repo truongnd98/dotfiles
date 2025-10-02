@@ -1,7 +1,6 @@
 return {
   {
-    "williamboman/mason.nvim",
-    -- enabled = false,
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
@@ -37,16 +36,13 @@ return {
     end,
   },
   {
-    "williamboman/mason-lspconfig.nvim",
-    -- enabled = false,
-    lazy = false,
+    "mason-org/mason-lspconfig.nvim",
     opts = {
       auto_install = true,
     },
   },
   {
     "neovim/nvim-lspconfig",
-    -- enabled = false,
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- lua
