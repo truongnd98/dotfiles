@@ -10,7 +10,7 @@ vim.opt.fileencoding = "utf-8"
 
 vim.opt.number = true
 -- vim.opt.relativenumber = true
--- vim.opt.signcolumn = "number"
+vim.opt.signcolumn = "number"
 
 vim.opt.title = true
 vim.opt.autoindent = true
