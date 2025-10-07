@@ -18,7 +18,7 @@ local function on_attach(bufnr)
   vim.keymap.set("n", "O",              api.node.open.no_window_picker,     opts("Open: No Window Picker"))
   vim.keymap.set("n", "p",              api.fs.paste,                       opts("Paste"))
   vim.keymap.set("n", "q",              api.tree.close,                     opts("Close"))
-  vim.keymap.set("n", "r",              api.fs.rename,                      opts("Rename"))
+  vim.keymap.set("n", "rn",             api.fs.rename,                      opts("Rename"))
   vim.keymap.set("n", "R",              api.tree.reload,                    opts("Refresh"))
   vim.keymap.set("n", "W",              api.tree.collapse_all,              opts("Collapse All"))
   vim.keymap.set("n", "x",              api.fs.cut,                         opts("Cut"))
@@ -34,7 +34,11 @@ return {
   config = function ()
     require("nvim-tree").setup({
       view = {
-        signcolumn = "auto",
+        signcolumn = "yes",
+        -- width = {
+        --   min = 45,
+        --   max = -1,
+        -- },
       },
       diagnostics = {
         enable = true,
@@ -51,50 +55,53 @@ return {
       },
       renderer = {
         root_folder_label = false,
-        indent_width = 3,
+        indent_width = 2,
+        hidden_display = "simple",
+        highlight_git = "all",
+        highlight_diagnostics = "all",
+        highlight_opened_files = "all",
+        highlight_modified = "all",
+        highlight_hidden = "all",
         icons = {
           show = {
+            hidden = true,
             bookmarks = false,
           },
-          -- git_placement = "after",
-          -- bookmarks_placement = "after",
-          diagnostics_placement = "after",
-          -- symlink_arrow = " -> ",
+          git_placement = "signcolumn",
+          diagnostics_placement = "signcolumn",
+          modified_placement = "signcolumn",
+          hidden_placement = "right_align",
+          symlink_arrow = " -> ",
           glyphs = {
             folder = {
-              -- arrow_closed = " ",
-              -- arrow_open = " ",
-              -- default = "",
-              -- open = "",
-              -- empty = "",
-              -- empty_open = "",
-              -- symlink = "",
-              -- symlink_open = ""
             },
-            -- default = "󱓻",
-            -- symlink = "󱓻",
-            -- bookmark = "",
+            bookmark = "",
             modified = "",
             hidden = "󱙝",
             git = {
-              unstaged = "×",
-              staged = "",
-              unmerged = "󰧾",
-              untracked = "",
-              renamed = "",
-              deleted = "",
-              ignored = "∅",
+              unstaged = "~",
+              staged = "✓",
+              unmerged = "",
+              renamed = "➜",
+              untracked = "#",
+              -- deleted = "",
+              deleted = "✗",
+              ignored = "◌",
             }
           }
         }
       },
       filters = {
+        -- git_ignored = false,
         custom = {
+          "^%.DS_Store$",
+          "^thumbs%.db$",
+        },
+        exclude = {
           "^node_modules$",
           "^.git$",
           "^dist$",
-          "^%.DS_Store$",
-          "^thumbs%.db$",
+          "^.env$",
         },
       },
       hijack_cursor = true,
