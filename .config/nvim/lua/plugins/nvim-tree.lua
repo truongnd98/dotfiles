@@ -35,10 +35,10 @@ return {
     require("nvim-tree").setup({
       view = {
         signcolumn = "yes",
-        -- width = {
-        --   min = 45,
-        --   max = -1,
-        -- },
+        width = {
+          min = 45,
+          max = -1,
+        },
       },
       diagnostics = {
         enable = true,
@@ -57,11 +57,6 @@ return {
         root_folder_label = false,
         indent_width = 2,
         hidden_display = "simple",
-        highlight_git = "all",
-        highlight_diagnostics = "all",
-        highlight_opened_files = "all",
-        highlight_modified = "all",
-        highlight_hidden = "all",
         icons = {
           show = {
             hidden = true,
@@ -84,7 +79,6 @@ return {
               unmerged = "",
               renamed = "➜",
               untracked = "#",
-              -- deleted = "",
               deleted = "✗",
               ignored = "◌",
             }
@@ -92,16 +86,9 @@ return {
         }
       },
       filters = {
-        -- git_ignored = false,
         custom = {
           "^%.DS_Store$",
           "^thumbs%.db$",
-        },
-        exclude = {
-          "^node_modules$",
-          "^.git$",
-          "^dist$",
-          "^.env$",
         },
       },
       hijack_cursor = true,

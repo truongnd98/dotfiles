@@ -75,7 +75,7 @@ return {
           {
             vim.bo[props.buf].modified and "[modified]" or "",
             gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
-            guifg = "#ff453a",
+            guifg = "#FF453A",
           },
         }
       end,

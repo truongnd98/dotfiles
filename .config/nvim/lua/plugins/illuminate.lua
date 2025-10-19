@@ -8,7 +8,7 @@ return {
       providers = {
         "lsp",
         "treesitter",
-        "regex" 
+        "regex",
       },
     },
   },

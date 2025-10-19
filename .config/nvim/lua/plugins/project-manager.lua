@@ -1,7 +1,5 @@
 return {
 	"truongnd98/project-manager.nvim",
-	-- enabled = false,
-	lazy = true,
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",

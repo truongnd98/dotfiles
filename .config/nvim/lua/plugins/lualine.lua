@@ -85,7 +85,7 @@ return {
           {
             "encoding",
             color = {
-              fg = "#ff453a",
+              fg = "#FF453A",
             },
           },
           "filetype"

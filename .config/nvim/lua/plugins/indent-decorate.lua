@@ -37,7 +37,6 @@ set_hl(0, "RainbowColorScope7", { fg = "#56B6C2" })
 
 return {
 	"truongnd98/indent-decorate.nvim",
-  enabled = false,
 	config = function()
     require("indent-decorate").setup({
       indent = {
