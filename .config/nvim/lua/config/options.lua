@@ -7,10 +7,15 @@ vim.g.autoformat = false
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
+vim.opt.lazyredraw = true       -- Don’t redraw while executing macros
+vim.opt.synmaxcol = 200         -- Limit syntax highlight columns
+vim.opt.updatetime = 300        -- Reduce CursorHold delay
+vim.opt.redrawtime = 500        -- Max time for syntax highlight
 
 vim.opt.number = true
--- vim.opt.relativenumber = true
-vim.opt.signcolumn = "number"
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.signcolumn = "yes"
 
 vim.opt.title = true
 vim.opt.autoindent = true
@@ -42,9 +47,6 @@ vim.opt.mouse = ""
 
 vim.opt.clipboard = "unnamedplus"
 
-vim.opt.cursorline = true
--- vim.opt.colorcolumn = "94"
-
 vim.opt.grepprg = "rg --vimgrep -n"
 -- vim.opt.grepformat = "%f:%l:%c:%m"
 
@@ -71,3 +73,14 @@ g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
 
 g.lazyvim_blink_main = false
+
+local disabled_built_ins = {
+  "gzip", "zip", "zipPlugin", "tar", "tarPlugin", "getscript", 
+  "getscriptPlugin", "vimball", "vimballPlugin", "matchit", 
+  "matchparen", "netrw", "netrwPlugin", "rplugin", "syntax", 
+  "synmenu", "optwin", "compiler", "bugreport", "ftplugin",
+}
+
+for _, plugin in pairs(disabled_built_ins) do
+  vim.g["loaded_" .. plugin] = 1
+end

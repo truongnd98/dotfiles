@@ -1,0 +1,79 @@
+##############################################
+#           PERFORMANCE OPTIMIZATIONS        #
+##############################################
+
+# Use fast memory-mapped I/O when available
+--mmap
+
+# Search only text, skip binary detection overhead
+--text
+
+# Use smart-case for intuitive behavior without loss of speed
+--smart-case
+
+# # Disable result sorting (sorting slows down rg)
+# --no-sort
+
+# Show only the matching lines (faster and cleaner)
+--no-heading
+--line-number
+
+# Use 8 threads by default (good for most multi-core CPUs)
+--threads=8
+
+# Avoid extremely large files unless explicitly searching them
+--max-filesize=1M
+
+
+##############################################
+#       SKIP DIRECTORIES THAT SLOW SEARCH    #
+##############################################
+
+# Node / JS ecosystem
+--glob=!node_modules/
+--glob=!dist/
+--glob=!build/
+--glob=!coverage/
+--glob=!public/
+--glob=!storybook-static/
+
+# Frontend bundles
+--glob=!*.min.js
+--glob=!*.bundle.js
+--glob=!*.map
+
+# TypeScript
+--glob=!*.tsbuildinfo
+
+# Go
+--glob=!bin/
+--glob=!pkg/
+--glob=!*.test
+
+# Rust
+--glob=!target/
+
+# OS & tooling garbage
+--glob=!.git/
+--glob=!.cache/
+--glob=!*.log
+--glob=!*.tmp
+--glob=!*.swp
+--glob=!*.bak
+--glob=!*.DS_Store
+
+##############################################
+#     LANGUAGE-AWARE SPEED IMPROVEMENTS      #
+##############################################
+
+# Prefer literal where possible (regex is slower)
+# (Note: Do not force literal here — use -F on demand)
+
+
+##############################################
+#       OPTIONAL: BETTER DEFAULT UX          #
+##############################################
+
+--colors=line:style:bold
+--colors=match:fg:blue
+--colors=path:fg:green

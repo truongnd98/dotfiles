@@ -18,7 +18,7 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	install = { colorscheme = { "tokyonight" } },
+	install = { colorscheme = { "gruvbox" } },
 	defaults = {
 		lazy = false,
 		version = false,
@@ -33,15 +33,15 @@ require("lazy").setup({
 		rtp = {
 			-- disable some rtp plugins
 			disabled_plugins = {
-				"gzip",
-				"matchit",
-				"matchparen",
-				"netrwPlugin",
-				"rplugin",
-				"tarPlugin",
-				"tohtml",
-				"tutor",
-				"zipPlugin",
+				-- "gzip",
+				-- "matchit",
+				-- "matchparen",
+				-- "netrwPlugin",
+				-- "rplugin",
+				-- "tarPlugin",
+				-- "tohtml",
+				-- "tutor",
+				-- "zipPlugin",
 			},
 		},
 	},

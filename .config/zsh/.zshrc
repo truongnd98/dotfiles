@@ -117,79 +117,78 @@ HIST_STAMPS="mm/dd/yyyy"
 # # alias ohmyzsh="mate ~/.oh-my-zsh"
 # fpath+=${ZDOTDIR:-~}/.zsh_functions
 #
-# # ---- FZF -----
-#
-# # Set up fzf key bindings and fuzzy completion
-# eval "$(fzf --zsh)"
-#
-# # --- setup fzf theme ---
-# fg="#CBE0F0"
-# bg="#011628"
-# bg_highlight="#143652"
-# purple="#B388FF"
-# blue="#06BCE4"
-# cyan="#2CF9ED"
-#
-# export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
-#
-# # -- Use fd instead of fzf --
-#
-# export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-# export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
-#
-# # Use fd (https://github.com/sharkdp/fd) for listing path candidates.
-# # - The first argument to the function ($1) is the base path to start traversal
-# # - See the source code (completion.{bash,zsh}) for the details.
-# _fzf_compgen_path() {
-#   fd --hidden --exclude .git . "$1"
-# }
-#
-# # Use fd to generate the list for directory completion
-# _fzf_compgen_dir() {
-#   fd --type=d --hidden --exclude .git . "$1"
-# }
-#
-# source ~/fzf-git.sh/fzf-git.sh
-#
-# show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
-#
-# export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
-# export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
-#
-# # Advanced customization of fzf options via _fzf_comprun function
-# # - The first argument to the function is the name of the command.
-# # - You should make sure to pass the rest of the arguments to fzf.
-# _fzf_comprun() {
-#   local command=$1
-#   shift
-#
-#   case "$command" in
-#     cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
-#     export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
-#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
-#     *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
-#   esac
-# }
-#
-# # ----- Bat (better cat) -----
-#
-# export BAT_THEME=tokyonight_night
-#
-# # ---- Eza (better ls) -----
-#
-# alias ls="eza --icons=always"
-#
-# # ---- TheFuck -----
-#
-# # thefuck alias
-# eval $(thefuck --alias)
-# eval $(thefuck --alias fk)
-#
-# # ---- Zoxide (better cd) ----
-# eval "$(zoxide init zsh)"
-#
-# alias cd="z"
+# ---- FZF -----
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
+
+# --- setup fzf theme ---
+fg="#CBE0F0"
+bg="#011628"
+bg_highlight="#143652"
+purple="#B388FF"
+blue="#06BCE4"
+cyan="#2CF9ED"
+
+export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+
+# -- Use fd instead of fzf --
+
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+source ~/fzf-git.sh/fzf-git.sh
+
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
+# ----- Bat (better cat) -----
+export BAT_THEME=tokyonight_night
+
+# ---- Eza (better ls) -----
+alias ls="eza --color=always --icons=always --long"
+# --no-filesize --no-time --no-user --no-permissions"
+
+# ---- TheFuck -----
+# thefuck alias
+eval $(thefuck --alias)
+eval $(thefuck --alias fuck)
+eval $(thefuck --alias fk)
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
+
+alias cd="z"
 #
 # # ---- Vim ----
 # # alias vim="nvim"
@@ -223,10 +222,10 @@ _clean_screen(){
 
 # ---- Clean screen----
 alias cls=_clean_screen
-#
-# export NVM_DIR="$HOME/.nvm"
-#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 #
 # # autoload -U +X bashcompinit && bashcompinit
 # # complete -o nospace -C /opt/homebrew/bin/terraform terraform
@@ -293,17 +292,31 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 # ### Zinit setup theme START
-zi ice as"command" from"gh-r" \
-  atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-  atpull"%atclone" src"init.zsh"
-zi light starship/starship
-# ### Zinit setup theme END
-#
+# zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
+zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
+zinit light sindresorhus/pure
+export PURE_PROMPT_SYMBOL="➜"
+export PURE_PROMPT_VICMD_SYMBOL="➜"
+# zi ice as"command" from"gh-r" \
+#   atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#   atpull"%atclone" src"init.zsh"
+# zi light starship/starship
+# ## Zinit setup theme END
+
 ### Zinit load plugin START
-ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
+
 zi ice wait lucid
 zi light zsh-users/zsh-autosuggestions
 bindkey "^ " autosuggest-accept
 zi ice wait lucid
 zi light zdharma-continuum/fast-syntax-highlighting
 ### Zinit load plugin END
+
+### NVM (Node Version Manager) -----
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+### Ripgrep config -----
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export PATH="$HOME/.local/bin:$PATH"

@@ -33,12 +33,28 @@ return {
   },
   config = function ()
     require("nvim-tree").setup({
+      root_dirs = {},
+      hijack_netrw = true,
+      hijack_cursor = false,
+      sync_root_with_cwd = false,
+      respect_buf_cwd = false,
+      update_focused_file = {
+        enable = false,
+        update_root = false,
+      },
+      filesystem_watchers = {
+        enable = false,
+      },
+      filters = {
+        dotfiles = false,
+        custom = {
+          "^%.DS_Store$",
+          "^thumbs%.db$",
+        },
+      },
       view = {
         signcolumn = "yes",
-        width = {
-          min = 45,
-          max = -1,
-        },
+        width = 45,
       },
       diagnostics = {
         enable = true,
@@ -59,20 +75,20 @@ return {
         hidden_display = "simple",
         icons = {
           show = {
-            hidden = true,
+            -- hidden = false,
+            -- git = false,
             bookmarks = false,
           },
           git_placement = "signcolumn",
           diagnostics_placement = "signcolumn",
           modified_placement = "signcolumn",
-          hidden_placement = "right_align",
           symlink_arrow = " -> ",
           glyphs = {
             folder = {
             },
             bookmark = "",
             modified = "",
-            hidden = "󱙝",
+            -- hidden = "󱙝",
             git = {
               unstaged = "~",
               staged = "✓",
@@ -85,14 +101,6 @@ return {
           }
         }
       },
-      filters = {
-        custom = {
-          "^%.DS_Store$",
-          "^thumbs%.db$",
-        },
-      },
-      hijack_cursor = true,
-      sync_root_with_cwd = true,
       actions = {
         open_file = {
           resize_window = true,

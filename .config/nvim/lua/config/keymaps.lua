@@ -27,14 +27,6 @@ keymap.set("n", "ds", 'v^"_d')
 -- Delete after cursor
 keymap.set("n", "de", 'v$h"_d')
 
--- Replace text selection
-local function tbl_length(T)
-	local count = 0
-	for _ in pairs(T) do
-		count = count + 1
-	end
-	return count
-end
 local escape_chars = function(string)
 	return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
 		["\\"] = "\\\\",
