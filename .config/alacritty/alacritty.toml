@@ -32,7 +32,7 @@ family = "JetBrainsMono Nerd Font"
 style = "Medium"
 
 [window]
-decorations ="Buttonless"
+# decorations ="Buttonless"
 decorations_theme_variant = "Dark"
 startup_mode = "Maximized"
 dynamic_padding = true
