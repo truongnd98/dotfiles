@@ -99,10 +99,10 @@ HIST_STAMPS="mm/dd/yyyy"
 #   export EDITOR='nvim'
 # fi
 #
-# alias reload-zsh="source ~/.zshrc"
-# alias edit-zsh="nvim ~/.zshrc"
-# alias edit-nvim="nvim ~/.config/nvim/"
-# alias edit-dotfile="nvim ~/Desktop/personal-dev-config/dotfiles/.config/"
+alias reload-zsh="source ~/.zshrc"
+alias edit-zsh="nvim ~/.zshrc"
+alias edit-nvim="nvim ~/.config/nvim/"
+alias edit-dotfile="nvim ~/Desktop/personal-dev-config/dotfiles/.config/"
 #
 # # Compilation flags
 # # export ARCHFLAGS="-arch x86_64"
@@ -172,18 +172,17 @@ _fzf_comprun() {
   esac
 }
 
-# ----- Bat (better cat) -----
-export BAT_THEME=tokyonight_night
-
 # ---- Eza (better ls) -----
 alias ls="eza --color=always --icons=always --long"
 # --no-filesize --no-time --no-user --no-permissions"
 
-# ---- TheFuck -----
-# thefuck alias
-eval $(thefuck --alias)
-eval $(thefuck --alias fuck)
-eval $(thefuck --alias fk)
+# # ---- TheFuck -----
+# # thefuck alias
+# eval $(thefuck --alias)
+# eval $(thefuck --alias fuck)
+# eval $(thefuck --alias fk)
+# alias fuck="thefuck"
+# alias fk="thefuck"
 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init zsh)"
@@ -223,9 +222,20 @@ _clean_screen(){
 # ---- Clean screen----
 alias cls=_clean_screen
 
+# ---- Lazy load nvm, node, npm, npx (Zsh) ----
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+_load_nvm() {
+  # unset -f nvm node npm npx _load_nvm
+  unset -f nvm _load_nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+}
+
+nvm()  { _load_nvm; nvm "$@"; }
+# node() { _load_nvm; node "$@"; }
+# npm()  { _load_nvm; npm "$@"; }
+# npx()  { _load_nvm; npx "$@"; }
+
 #
 # # autoload -U +X bashcompinit && bashcompinit
 # # complete -o nospace -C /opt/homebrew/bin/terraform terraform
@@ -313,9 +323,6 @@ bindkey "^ " autosuggest-accept
 zi ice wait lucid
 zi light zdharma-continuum/fast-syntax-highlighting
 ### Zinit load plugin END
-
-### NVM (Node Version Manager) -----
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 ### Ripgrep config -----
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"

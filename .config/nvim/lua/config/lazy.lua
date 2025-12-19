@@ -53,7 +53,7 @@ require("lazy").setup({
 		},
 		icons = {
 			cmd = "⌘",
-			config = "🛠",
+			config = "🛠", -- 🌟
 			event = "📅",
 			ft = "📂",
 			init = "🔆",
