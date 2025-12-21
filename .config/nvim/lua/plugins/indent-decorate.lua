@@ -36,24 +36,24 @@ set_hl(0, "RainbowColorScope6", { fg = "#C678DD" })
 set_hl(0, "RainbowColorScope7", { fg = "#56B6C2" })
 
 return {
-	"truongnd98/indent-decorate.nvim",
-	config = function()
-    require("indent-decorate").setup({
-      indent = {
-        indent = {
-          -- char = "│",
-          char = "┊",
-          -- char = "+",
-          hl = highlight,
-        },
-        scope = {
-          -- char = "│",
-          char = "┊",
-          -- char = "+",
-          hl = highlightScope,
-        },
-        animate = {},
-      }
-    })
-  end,
+	-- "truongnd98/indent-decorate.nvim",
+	-- config = function()
+ --    require("indent-decorate").setup({
+ --      indent = {
+ --        indent = {
+ --          -- char = "│",
+ --          char = "┊",
+ --          -- char = "+",
+ --          hl = highlight,
+ --        },
+ --        scope = {
+ --          -- char = "│",
+ --          char = "┊",
+ --          -- char = "+",
+ --          hl = highlightScope,
+ --        },
+ --        animate = {},
+ --      }
+ --    })
+ --  end,
 }

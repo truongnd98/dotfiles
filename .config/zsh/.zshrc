@@ -222,14 +222,14 @@ _clean_screen(){
 # ---- Clean screen----
 alias cls=_clean_screen
 
-# ---- Lazy load nvm, node, npm, npx (Zsh) ----
-export NVM_DIR="$HOME/.nvm"
-
-_load_nvm() {
-  # unset -f nvm node npm npx _load_nvm
-  unset -f nvm _load_nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-}
+# # ---- Lazy load nvm, node, npm, npx (Zsh) ----
+# export NVM_DIR="$HOME/.nvm"
+#
+# _load_nvm() {
+#   # unset -f nvm node npm npx _load_nvm
+#   unset -f nvm _load_nvm
+#   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# }
 
 nvm()  { _load_nvm; nvm "$@"; }
 # node() { _load_nvm; node "$@"; }
@@ -322,6 +322,16 @@ zi light zsh-users/zsh-autosuggestions
 bindkey "^ " autosuggest-accept
 zi ice wait lucid
 zi light zdharma-continuum/fast-syntax-highlighting
+
+# ---- Lazy load nvm
+export NVM_DIR="$HOME/.nvm"
+zi ice wait lucid atload="
+  unset -f nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+"
+zi snippet /dev/null
+# ---- Lazy load nvm
+#
 ### Zinit load plugin END
 
 ### Ripgrep config -----
