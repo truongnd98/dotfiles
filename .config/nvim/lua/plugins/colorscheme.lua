@@ -18,8 +18,8 @@ return {
     end,
     config = function()
       vim.cmd.colorscheme "aurora"
-      -- -- override defaults
-      -- vim.api.nvim_set_hl(0, '@number', {fg='#e933e3'})
+      -- override defaults
+      vim.api.nvim_set_hl(0, "@number", { fg = "#e933e3" })
     end
   }
 }

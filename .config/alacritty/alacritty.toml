@@ -5,15 +5,13 @@ import = [
 ]
 live_config_reload = true
 
-# [colors.primary]
-# background = "#24283b"
-# foreground = "#a9b1d6"
-
 [env]
 TERM = "alacritty"
 
 [font]
 size = 14.0
+offset = { x = 0, y = 2 }
+glyph_offset = { x = 0, y = 0 }
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -25,18 +23,18 @@ style = "Bold Italic"
 
 [font.italic]
 family = "JetBrainsMono Nerd Font"
-style = "Medium Italic"
+style = "Light Italic"
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"
-style = "Medium"
+style = "Regular"
 
 [window]
 # decorations ="Buttonless"
 decorations_theme_variant = "Dark"
 startup_mode = "Maximized"
 # dynamic_padding = true
-opacity = 0.8
+opacity = 0.85
 blur = true
 option_as_alt ="Both"
 
@@ -46,7 +44,7 @@ instance = "Alacritty"
 
 [window.padding]
 x = 4
-y = 0
+y = 4
 
 [scrolling]
 history = 10000

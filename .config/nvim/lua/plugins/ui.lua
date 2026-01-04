@@ -1,24 +1,4 @@
 return {
-	-- -- animations
-	-- {
-	-- 	"echasnovski/mini.animate",
-	-- 	event = "VeryLazy",
-	-- 	opts = function(_, opts)
-	-- 		opts.scroll = {
-	-- 			enable = false,
-	-- 		}
-	-- 		opts.resize = {
-	-- 			enable = false,
-	-- 		}
-	-- 		opts.open = {
-	-- 			enable = false,
-	-- 		}
-	-- 		opts.close = {
-	-- 			enable = false,
-	-- 		}
-	-- 	end,
-	-- },
-	--
 	-- {
 	-- 	"folke/zen-mode.nvim",
 	-- 	cmd = "ZenMode",
@@ -31,4 +11,8 @@ return {
 	-- 	},
 	-- 	keys = { { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
 	-- },
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  },
 }

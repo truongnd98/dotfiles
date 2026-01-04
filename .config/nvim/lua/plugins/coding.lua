@@ -11,4 +11,12 @@ return {
 		end,
 		event = "VeryLazy",
 	},
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use "master" for latest features, "*" for stable releases
+    config = function()
+      require("nvim-surround").setup()
+    end,
+    event = "VeryLazy",
+  },
 }

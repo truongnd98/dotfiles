@@ -12,7 +12,7 @@ return {
       copilot_suggestion_hidden = true,
       keymap = {
         -- accept = false, -- handled by nvim-cmp / blink.cmp
-        accept = "<leader><cr>",
+        -- accept = "<M-CR>",
         next = "<M-]>",
         prev = "<M-[>",
       },

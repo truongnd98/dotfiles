@@ -45,7 +45,13 @@ return {
 
         local function get_diagnostic_label()
           local names = { "hint", "info", "warn", "error" }
-          local icons = { error = "", warn = "", info = "", hint = "" }
+          local icons = { 
+            error = "",
+            warn = "",
+            info = "",
+            hint = "",
+            -- hint = "",
+          }
           local labels = {}
 
           for _, severity in ipairs(names) do

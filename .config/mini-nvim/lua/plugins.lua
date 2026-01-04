@@ -19,9 +19,6 @@ require("lazy").setup({
     },
   },
 
-  -- LSP
-  { "neovim/nvim-lspconfig" },
-
   -- blink-cmp (auto-completion siêu nhẹ)
   {
     "Saghen/blink.cmp",
