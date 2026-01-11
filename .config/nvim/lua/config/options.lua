@@ -45,6 +45,10 @@ vim.opt.splitright = true -- Put new windows right of current
 vim.opt.splitkeep = "cursor"
 vim.opt.mouse = "a"
 
+vim.opt.guicursor = "n-v-i-c:block-Cursor"
+vim.opt.list = true
+vim.opt.listchars:append({ space = "·", trail = "·" })
+
 vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
