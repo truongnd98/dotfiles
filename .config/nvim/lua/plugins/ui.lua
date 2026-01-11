@@ -14,12 +14,18 @@ return {
   {
     "sphamba/smear-cursor.nvim",
     opts = {
-      stiffness = 0.8,
-      trailing_stiffness = 0.5,
-      distance_stop_animating = 0.5,
-
       -- legacy_computing_symbols_support = true,
       distance_stop_animating_vertical_bar = 0.1,
+
+      cursor_color = "#a277ff",
+      stiffness = 0.5,
+      trailing_stiffness = 0.2,
+      trailing_exponent = 5,
+      damping = 0.85,
+      gradient_exponent = 0,
+      gamma = 1,
+      never_draw_over_target = true,
+      hide_target_hack = true,
     },
   },
 }

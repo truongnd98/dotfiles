@@ -1,12 +1,45 @@
 [general]
 import = [
-  "~/.config/alacritty/themes/themes/aura.toml",
+  # "~/.config/alacritty/themes/themes/aura.toml",
   "./key_bindings.toml"
 ]
 live_config_reload = true
 
+# Aura Theme for Alacritty Terminal
+[colors.primary]
+background = "#15141b"
+foreground = "#edecee"
+
+[colors.cursor]
+cursor = "#a277ff"
+
+# [colors.selection]
+# text = "CellForeground"
+# background = "#29263c"
+
+[colors.normal]
+black = "#110f18"
+red = "#ff6767"
+green = "#61ffca"
+yellow = "#ffca85"
+blue = "#a277ff"
+magenta = "#a277ff"
+cyan = "#61ffca"
+white = "#edecee"
+
+[colors.bright]
+black = "#4d4d4d"
+red = "#ff6767"
+green = "#61ffca"
+yellow = "#ffca85"
+blue = "#a277ff"
+magenta = "#a277ff"
+cyan = "#61ffca"
+white = "#edecee"
+
 [env]
 TERM = "alacritty"
+LC_ALL = "en_US.UTF-8"
 
 [font]
 size = 14.0
