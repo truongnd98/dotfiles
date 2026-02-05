@@ -23,6 +23,7 @@ return {
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
+        disable = { "bigfile" },
       },
       indent = {
         enable = false,

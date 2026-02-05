@@ -13,15 +13,16 @@ return {
 	-- },
   {
     "sphamba/smear-cursor.nvim",
+    enabled = vim.env.TMUX == nil,
     opts = {
       -- legacy_computing_symbols_support = true,
-      distance_stop_animating_vertical_bar = 0.1,
+      distance_stop_animating_vertical_bar = 0.5,
 
       cursor_color = "#a277ff",
-      stiffness = 0.5,
-      trailing_stiffness = 0.2,
-      trailing_exponent = 5,
-      damping = 0.85,
+      stiffness = 0.8,
+      trailing_stiffness = 0.5,
+      trailing_exponent = 2,
+      damping = 0.7,
       gradient_exponent = 0,
       gamma = 1,
       never_draw_over_target = true,

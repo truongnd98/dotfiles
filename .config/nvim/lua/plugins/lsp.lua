@@ -16,28 +16,31 @@ return {
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")
+
+      vim.api.nvim_create_user_command("MasonInstallAll", function()
+        mr.refresh(function()
+          for _, tool in ipairs(opts.ensure_installed) do
+            local p = mr.get_package(tool)
+            if not p:is_installed() then
+              p:install()
+            end
+          end
+        end)
+      end, {})
+
       mr:on("package:install:success", function()
         vim.defer_fn(function()
-          -- trigger FileType event to possibly load this newly installed LSP server
           require("lazy.core.handler.event").trigger({
             event = "FileType",
             buf = vim.api.nvim_get_current_buf(),
           })
         end, 100)
       end)
-
-      mr.refresh(function()
-        for _, tool in ipairs(opts.ensure_installed) do
-          local p = mr.get_package(tool)
-          if not p:is_installed() then
-            p:install()
-          end
-        end
-      end)
     end,
   },
   {
     "mason-org/mason-lspconfig.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
       auto_install = false,
     },
@@ -52,13 +55,19 @@ return {
         capabilities = capabilities,
         settings = {
           Lua = {
+            hint = { enable = false },
             diagnostics = {
               globals = { "vim" },
             },
             workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
+              library = {
+                vim.env.VIMRUNTIME,
+              },
               checkThirdParty = false,
+              maxPreload = 2000,
+              preloadFileSize = 1000,
             },
+            completion = { callSnippet = "Replace" },
             telemetry = {
               enable = false,
             },
@@ -69,6 +78,15 @@ return {
       vim.lsp.enable("ts_ls")
       vim.lsp.config["ts_ls"] = {
         capabilities = capabilities,
+        cmd = { "typescript-language-server", "--stdio", "--max-old-space-size=4096" },
+        settings = {
+          typescript = {
+            inlayHints = { includeInlayParameterNameHints = "all" }
+          },
+          javascript = {
+            inlayHints = { includeInlayParameterNameHints = "all" }
+          },
+        },
       }
       -- Js
       vim.lsp.enable("eslint")
@@ -78,6 +96,18 @@ return {
       vim.lsp.enable("gopls")
       vim.lsp.config["gopls"] = {
         capabilities = capabilities,
+        settings = {
+          gopls = {
+            staticcheck = true,
+            gofumpt = true,
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+            completeUnimported = true,
+            usePlaceholders = true,
+          },
+        },
       }
       -- golangci lint
       vim.lsp.enable("golangci_lint_ls")

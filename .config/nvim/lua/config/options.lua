@@ -13,8 +13,8 @@ vim.opt.updatetime = 300        -- Reduce CursorHold delay
 vim.opt.redrawtime = 500        -- Max time for syntax highlight
 
 vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.cursorline = true
+vim.opt.relativenumber = false
+vim.opt.cursorline = false 
 vim.opt.signcolumn = "yes"
 
 vim.opt.title = true

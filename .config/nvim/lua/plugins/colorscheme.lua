@@ -20,6 +20,10 @@ return {
       vim.cmd.colorscheme "aurora"
       -- override defaults
       vim.api.nvim_set_hl(0, "@number", { fg = "#e933e3" })
+
+      -- Visual mode selection highlight
+      vim.api.nvim_set_hl(0, "Visual", { bg = "#44475a", reverse = true })
+      vim.api.nvim_set_hl(0, "VisualNOS", { bg = "#44475a", reverse = true })
     end
   }
 }

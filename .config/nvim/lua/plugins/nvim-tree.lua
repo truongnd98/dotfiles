@@ -1,6 +1,5 @@
 local function on_attach(bufnr)
   local api = require("nvim-tree.api")
-
   local function opts(desc)
     return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
   end
@@ -28,92 +27,68 @@ end
 
 return {
   "nvim-tree/nvim-tree.lua",
-	dependencies = {
-    "nvim-tree/nvim-web-devicons",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+  cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFile" },
+  keys = {
+    { "<leader>e", "<cmd>NvimTreeOpen<CR>", desc = "NvimTree Open" },
+    { "<leader>E", "<cmd>NvimTreeOpen<CR>", desc = "NvimTree Open" },
+    { "<leader>q", "<cmd>NvimTreeClose<CR>", desc = "NvimTree Close" },
+    { "<leader>Q", "<cmd>NvimTreeClose<CR>", desc = "NvimTree Close" },
   },
-  config = function ()
-    require("nvim-tree").setup({
-      root_dirs = {},
-      hijack_netrw = true,
-      hijack_cursor = false,
-      sync_root_with_cwd = false,
-      respect_buf_cwd = false,
-      update_focused_file = {
-        enable = false,
-        update_root = false,
+  opts = {
+    root_dirs = {},
+    hijack_netrw = true,
+    hijack_cursor = false,
+    sync_root_with_cwd = false,
+    respect_buf_cwd = false,
+    filters = {
+      dotfiles = false,
+      custom = {
+        "^%.DS_Store$",
+        "^thumbs%.db$",
       },
-      filesystem_watchers = {
-        enable = false,
+    },
+    diagnostics = {
+      enable = true,
+      debounce_delay = 300,
+      icons = {
+        hint = "",
+        info = "",
+        warning = "",
+        error = "",
       },
-      filters = {
-        dotfiles = false,
-        custom = {
-          "^%.DS_Store$",
-          "^thumbs%.db$",
-        },
+    },
+    modified = {
+      enable = true,
+    },
+    actions = {
+      open_file = {
+        resize_window = true,
       },
-      view = {
-        signcolumn = "yes",
-        width = 45,
-      },
-      diagnostics = {
-        enable = true,
-        debounce_delay = 300,
-        icons = {
-          hint = "",
-          info = "",
-          warning = "",
-          error = "",
-        },
-      },
-      modified = {
-        enable = true,
-      },
-      renderer = {
-        root_folder_label = false,
-        indent_width = 2,
-        hidden_display = "simple",
-        icons = {
-          show = {
-            -- hidden = false,
-            -- git = false,
-            bookmarks = false,
-          },
-          git_placement = "signcolumn",
-          diagnostics_placement = "signcolumn",
-          modified_placement = "signcolumn",
-          symlink_arrow = " -> ",
-          glyphs = {
-            folder = {
-            },
-            bookmark = "",
-            modified = "",
-            -- hidden = "󱙝",
-            git = {
-              unstaged = "~",
-              staged = "✓",
-              unmerged = "",
-              renamed = "➜",
-              untracked = "#",
-              deleted = "✗",
-              ignored = "◌",
-            }
+    },
+    view = {
+      signcolumn = "yes",
+      width = 45,
+    },
+    renderer = {
+      root_folder_label = false,
+      icons = {
+        git_placement = "signcolumn",
+        glyphs = {
+          bookmark = "",
+          modified = "",
+          git = {
+            unstaged = "~", staged = "✓", unmerged = "",
+            renamed = "➜", untracked = "#", deleted = "✗", ignored = "◌",
           }
         }
-      },
-      actions = {
-        open_file = {
-          resize_window = true,
-        },
-      },
-      on_attach = on_attach,
-    })
-
-		local opts = { noremap = true, silent = true }
-
-    vim.keymap.set("n", "<leader>e", ":NvimTreeOpen<CR>", opts)
-    vim.keymap.set("n", "<leader>E", ":NvimTreeOpen<CR>", opts)
-    vim.keymap.set("n", "<leader>q", ":NvimTreeClose<CR>", opts)
-    vim.keymap.set("n", "<leader>Q", ":NvimTreeClose<CR>", opts)
+      }
+    },
+    filesystem_watchers = { enable = false },
+    update_focused_file = { enable = false },
+    on_attach = on_attach,
+  },
+  config = function(_, opts)
+    require("nvim-tree").setup(opts)
   end,
 }
