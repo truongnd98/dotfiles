@@ -25,6 +25,10 @@ return {
           mappings = {
             n = {},
           },
+          preview = {
+            treesitter = false,
+            filesize_limit = 1,
+          },
         },
         pickers = {
           diagnostics = {
