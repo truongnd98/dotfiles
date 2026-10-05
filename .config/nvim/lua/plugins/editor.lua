@@ -13,15 +13,16 @@ return {
 
       local opts = {
         defaults = {
-          wrap_results = true,
+          -- `path_display = truncate` đã lo đường dẫn dài, không cần wrap.
+          wrap_results = false,
           layout_strategy = "horizontal",
           borderchars = { "━", "┃", "━", "┃","┏", "┓", "┛", "┗" },
-          vimgrep_arguments = { "rg", "--vimgrep" },
+          -- `!.git` cần thiết vì <leader>fs truyền `--hidden` cho rg.
+          vimgrep_arguments = { "rg", "--vimgrep", "--glob", "!.git/*" },
           -- layout_config = { prompt_position = "top" },
           path_display = { truncate = 3 },
           -- sorting_strategy = "ascending",
           winblend = 0,
-          wrap_results = false,
           mappings = {
             n = {},
           },
@@ -53,12 +54,17 @@ return {
       -- set keymaps
       local keymap = vim.keymap -- for conciseness
 
+      -- `--hidden` để thấy .github/, .env.example...; `--exclude .git` để không
+      -- lội vào object của git. KHÔNG dùng `--no-ignore`: với repo Go/Rust nó
+      -- kéo cả `target/`, `vendor/`, `node_modules/` vào kết quả.
       keymap.set(
         "n",
         "<leader>ff",
         function ()
           require("telescope.builtin").find_files({
-            find_command = { "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--no-ignore" },
+            find_command = {
+              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--exclude", ".git",
+            },
           })
         end,
         { desc = "Fuzzy find files in cwd" }
@@ -67,9 +73,23 @@ return {
         "n",
         "<leader>fs",
         function ()
-          require("telescope.builtin").live_grep({ hidden = true, no_ignore = true })
+          require("telescope.builtin").live_grep({ hidden = true })
         end,
         { desc = "Find string in cwd" }
+      )
+      -- Khi thật sự cần tìm trong file bị .gitignore (build output, vendor).
+      keymap.set(
+        "n",
+        "<leader>fa",
+        function ()
+          require("telescope.builtin").find_files({
+            find_command = {
+              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--no-ignore",
+              "--exclude", ".git",
+            },
+          })
+        end,
+        { desc = "Fuzzy find files in cwd (kể cả file bị ignore)" }
       )
 
       -- disable keymap <leader><leader>

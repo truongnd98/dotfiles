@@ -3,17 +3,18 @@ local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
 -- Do things without affecting the registers
+--
+-- `<leader>c` và `<leader>d` (chữ thường) đã bỏ: chúng là tiền tố của
+-- <leader>ca/ch/cl/cm/cf/co (LSP) và <leader>db/dc/di/do/... (DAP), nên mỗi
+-- lần dùng phải chờ hết `timeoutlen` (1s) mới chạy. Bản chữ hoa không trùng
+-- với gì nên giữ lại; cần bản chữ thường thì gõ thẳng `"_d` / `"_c`.
 keymap.set("n", "x", '"_x')
 keymap.set("n", "<Leader>p", '"0p')
 keymap.set("n", "<Leader>P", '"0P')
 keymap.set("v", "<Leader>p", '"0p')
-keymap.set("n", "<Leader>c", '"_c')
 keymap.set("n", "<Leader>C", '"_C')
-keymap.set("v", "<Leader>c", '"_c')
 keymap.set("v", "<Leader>C", '"_C')
-keymap.set("n", "<Leader>d", '"_d')
 keymap.set("n", "<Leader>D", '"_D')
-keymap.set("v", "<Leader>d", '"_d')
 keymap.set("v", "<Leader>D", '"_D')
 
 -- Increment/decrement
@@ -22,10 +23,10 @@ keymap.set("n", "-", "<C-x>")
 
 -- Delete inner word
 keymap.set("n", "dw", 'viw"_d')
--- Delete before cursor
-keymap.set("n", "ds", 'v^"_d')
 -- Delete after cursor
 keymap.set("n", "de", 'v$h"_d')
+-- `ds` (delete before cursor) đã bỏ: nvim-surround chiếm `ds` cho
+-- <Plug>(nvim-surround-delete) nên map này không bao giờ chạy. Dùng `d^`.
 
 local escape_chars = function(string)
 	return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
@@ -130,3 +131,8 @@ keymap.set("n", "<leader>s", vim.diagnostic.open_float, { desc = "Show diagnosti
 
 -- Remove highlight
 keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Remove highlight" })
+
+-- Format buffer thủ công (format-on-save cho Go/Rust nằm ở config/autocmds.lua)
+keymap.set("n", "<leader>cf", function()
+  require("util.lsp").format()
+end, { desc = "Format buffer" })

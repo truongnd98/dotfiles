@@ -8,9 +8,10 @@ return {
       enabled = true,
       auto_trigger = true,
       trigger_on_accept = false,
-      hide_during_completion = false,
+      -- Ẩn ghost text của Copilot khi menu blink.cmp đang mở: nếu để `false`,
+      -- gợi ý Copilot và danh sách completion vẽ đè lên nhau.
+      hide_during_completion = true,
       debounce = 250,
-      copilot_suggestion_hidden = true,
       keymap = {
         -- accept = false, -- handled by nvim-cmp / blink.cmp
         next = "<M-]>",
@@ -23,7 +24,9 @@ return {
       help = true,
     },
     server = {
-      types = "binary",
+      -- Key đúng là `type` (trước đây viết `types` nên bị bỏ qua); dùng binary
+      -- của copilot-language-server thay vì chạy qua Node.
+      type = "binary",
     },
     server_opts_overrides = {
       trace = "off",

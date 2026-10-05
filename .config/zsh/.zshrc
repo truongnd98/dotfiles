@@ -337,3 +337,4 @@ zi snippet /dev/null
 ### Ripgrep config -----
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:$(go env GOPATH)/bin

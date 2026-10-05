@@ -84,8 +84,15 @@ return {
         }
       }
     },
-    filesystem_watchers = { enable = false },
-    update_focused_file = { enable = false },
+    -- Bật watcher: sau `git checkout` / code generator sinh file, cây tự cập
+    -- nhật. nvim-tree dùng chung event loop của libuv nên chi phí không đáng kể,
+    -- miễn là có `ignore_dirs` cho các thư mục sinh ra hàng nghìn file.
+    filesystem_watchers = {
+      enable = true,
+      debounce_delay = 50,
+      ignore_dirs = { "node_modules", "target", "dist", ".git/objects" },
+    },
+    update_focused_file = { enable = true },
     on_attach = on_attach,
   },
   config = function(_, opts)

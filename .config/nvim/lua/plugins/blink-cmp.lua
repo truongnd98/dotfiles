@@ -1,6 +1,22 @@
 return {
   "saghen/blink.cmp",
+  dependencies = {
+    -- -- optional: provides snippets for the snippet source
+    -- 'rafamadriz/friendly-snippets',
+    {
+      "L3MON4D3/LuaSnip",
+      version = "v2.*",
+      -- jsregexp để snippet dùng transform (vd: `${1/.*/\U$0/}`) chạy được.
+      build = "make install_jsregexp",
+      opts = { history = true, delete_check_events = "TextChanged" },
+    },
+  },
+
+  -- `version = '*'` -> lazy checkout release tag, blink tự tải binary fuzzy
+  -- matcher dựng sẵn. KHÔNG thêm `build = require('blink.cmp').build()`:
+  -- cái đó chạy `cargo build --release` (cần Rust nightly) cho một thứ đã có.
   version = "*",
+
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
@@ -64,15 +80,7 @@ return {
         "buffer",
       },
     },
+    fuzzy = { implementation = "rust" },
   },
   opts_extend = { "sources.default" },
-  dependencies = {
-    {
-      "L3MON4D3/LuaSnip",
-      -- version = "v2.*",
-      build = "make install_jsregexp",
-      opts = { history = true, delete_check_events = "TextChanged" },
-    },
-    "tamago324/nlsp-settings.nvim",
-  },
 }

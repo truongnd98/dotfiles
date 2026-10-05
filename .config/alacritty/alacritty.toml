@@ -43,23 +43,40 @@ LC_ALL = "en_US.UTF-8"
 
 [font]
 size = 14.0
-offset = { x = 3, y = 0 }
-glyph_offset = { x = 3, y = 0 }
+offset = { x = 0, y = 2 }
+glyph_offset = { x = 0, y = 0 }
 
+# [font.bold]
+# family = "JetBrainsMono Nerd Font"
+# style = "Bold"
+# 
+# [font.bold_italic]
+# family = "JetBrainsMono Nerd Font"
+# style = "Bold Italic"
+# 
+# [font.italic]
+# family = "JetBrainsMono Nerd Font"
+# style = "Light Italic"
+# 
+# [font.normal]
+# family = "JetBrainsMono Nerd Font"
+# style = "Regular"
+
+# Maple Mono
 [font.bold]
-family = "JetBrainsMono Nerd Font"
+family = "Maple Mono NF"
 style = "Bold"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "Maple Mono NF"
 style = "Bold Italic"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
-style = "Light Italic"
+family = "Maple Mono NF"
+style = "Italic"
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "Maple Mono NF"
 style = "Regular"
 
 [window]
@@ -76,8 +93,8 @@ general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 4
-y = 4
+x = 8
+y = 8
 
 [scrolling]
 history = 2000
@@ -88,3 +105,8 @@ blink_interval = 500
 
 [cursor.style]
 blinking = "Always"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"
