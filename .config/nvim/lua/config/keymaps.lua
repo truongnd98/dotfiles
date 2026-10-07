@@ -28,23 +28,29 @@ keymap.set("n", "de", 'v$h"_d')
 -- `ds` (delete before cursor) đã bỏ: nvim-surround chiếm `ds` cho
 -- <Plug>(nvim-surround-delete) nên map này không bao giờ chạy. Dùng `d^`.
 
-local escape_chars = function(string)
-	return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
+-- Escape ký tự có nghĩa đặc biệt trong regex Vim trước khi nhét text đã chọn
+-- vào `:%s/`.
+--
+-- Hai thứ đã sửa so với bản cũ:
+--  - Tham số tên `string` che module `string` global. Nó chạy được nhờ string
+--    metatable (`text:gsub`) nhưng là bẫy chờ nổ.
+--  - Character class cũ `"[%(|%)|\\|%[|...]"` có cả ký tự `|` trong class (trong
+--    `[]` thì `|` là literal, không phải "hoặc"). `|` khớp rồi tra bảng ra nil
+--    nên gsub giữ nguyên - vô hại nhưng sai ý. Class mới chỉ chứa đúng 10 ký
+--    tự có trong bảng thay thế.
+local function escape_chars(text)
+	return (text:gsub("[\\%[%]%-%}%+%*%^%$%.]", {
 		["\\"] = "\\\\",
 		["-"] = "\\-",
-		-- ["("] = "\\(",
-		-- [")"] = "\\)",
 		["["] = "\\[",
 		["]"] = "\\]",
-		-- ["{"] = "\\{",
 		["}"] = "\\}",
-		-- ["?"] = "\\?",
 		["+"] = "\\+",
 		["*"] = "\\*",
 		["^"] = "\\^",
 		["$"] = "\\$",
 		["."] = "\\.",
-	})
+	}))
 end
 keymap.set("v", "<leader>h", function()
 	local _, start_line, start_col, end_line, end_col 
@@ -115,18 +121,16 @@ vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
 vim.keymap.set("n", "K", ":m -2<cr>==")
 vim.keymap.set("n", "J", ":m +1<cr>==")
 
--- Quickfix
-keymap.set("n", "qn", function ()
-  pcall(function ()
-    vim.cmd("cnext")
-  end)
-end, { desc = "Goto previous item quickfix list" })
-keymap.set("n", "qp", function ()
-  pcall(function ()
-    vim.cmd("cpre")
-  end)
-end, { desc = "Goto previous item quickfix list" })
-keymap.set("n", "qf", ":cfirst<cr>", { desc = "Goto first item quickfix list" })
+-- Quickfix: KHÔNG map gì ở đây.
+--
+-- Nvim 0.11+ đã có sẵn `]q`/`[q` (:cnext/:cprevious), `]Q`/`[Q`
+-- (:clast/:crewind) - kèm hỗ trợ count, nên `3]q` nhảy 3 item. Cùng bộ đó còn
+-- `]d`/`[d` (diagnostic), `]b`/`]t`, `]l`/`[l` (loclist).
+--
+-- Bản cũ `qn`/`qp`/`qf` đã xoá vì nó biến `q` thành prefix: không record macro
+-- được vào register n/p/f, và MỌI `q<register>` khác phải chờ hết `timeoutlen`
+-- mới vào chế độ record. Cùng loại vấn đề với `<leader>c`/`<leader>d` ở đầu
+-- file này. Viết lại bằng tay cũng không nên: bản tay mất count.
 
 -- Diagnostic
 keymap.set("n", "<leader>s", vim.diagnostic.open_float, { desc = "Show diagnostic error" })

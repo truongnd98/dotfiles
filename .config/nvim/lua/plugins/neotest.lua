@@ -63,7 +63,7 @@ return {
         output = { open_on_run = false },
         quickfix = {
           enabled = true,
-          open = false, -- lỗi vào quickfix, dùng `qn`/`qp` để duyệt
+          open = false, -- lỗi vào quickfix, dùng `]q`/`[q` để duyệt
         },
         status = { virtual_text = true, signs = true },
       })

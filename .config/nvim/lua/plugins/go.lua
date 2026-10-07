@@ -9,7 +9,20 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     ft = { "go", "gomod", "gowork", "gotmpl" },
-    build = ':lua require("go.install").update_all_sync()',
+    -- `update_all_sync()` cài TẤT CẢ 21 binary của go.nvim qua `go install`,
+    -- trong đó 10 cái Mason đã quản (gopls, gofumpt, goimports, golangci-lint,
+    -- gomodifytags, impl, iferr, gotests, dlv, gotestsum) -> hai bản mỗi tool
+    -- (mason/bin và GOPATH/bin) và PATH order quyết định bản nào chạy. Hiện
+    -- version còn trùng nhau, nhưng sẽ lệch ngay khi một bên update.
+    --
+    -- Trong các keymap dưới đây chỉ `:GoFillSwitch` cần binary Mason không có
+    -- (`fillswitch`). `:GoFillStruct` dùng code action của gopls, không cần
+    -- binary (reftool.lua:88-94).
+    build = function()
+      if vim.fn.executable("fillswitch") == 0 then
+        require("go.install").install("fillswitch")
+      end
+    end,
     opts = {
       -- Tắt hết phần chồng chéo với setup sẵn có.
       lsp_cfg = false,          -- gopls do lua/plugins/lsp.lua cấu hình

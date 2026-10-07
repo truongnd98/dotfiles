@@ -1,7 +1,9 @@
 [general]
+# Đường dẫn tuyệt đối: `./key_bindings.toml` phụ thuộc CWD của process
+# alacritty, không phải vị trí file config.
 import = [
   # "~/.config/alacritty/themes/themes/aura.toml",
-  "./key_bindings.toml"
+  "~/.config/alacritty/key_bindings.toml",
 ]
 live_config_reload = true
 
@@ -39,7 +41,9 @@ white = "#edecee"
 
 [env]
 TERM = "alacritty"
-LC_ALL = "en_US.UTF-8"
+# `LANG` chứ không phải `LC_ALL`: LC_ALL ghi đè MỌI locale category, kể cả
+# LC_COLLATE - làm thứ tự `sort`, `ls`, glob khác với mặc định của hệ thống.
+LANG = "en_US.UTF-8"
 
 [font]
 size = 14.0
@@ -106,7 +110,5 @@ blink_interval = 500
 [cursor.style]
 blinking = "Always"
 
-[[keyboard.bindings]]
-key = "Return"
-mods = "Shift"
-chars = "\u001B\r"
+# Khối `[[keyboard.bindings]]` (Shift+Enter) đã chuyển sang key_bindings.toml
+# để keyboard.bindings chỉ còn một nguồn.

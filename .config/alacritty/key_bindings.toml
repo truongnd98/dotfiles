@@ -1,7 +1,15 @@
 [keyboard]
+# Tất cả keyboard.bindings tập trung ở file này. Trước đây alacritty.toml cũng
+# có một khối `[[keyboard.bindings]]` riêng -> hai nơi định nghĩa cùng một
+# key path, rất dễ nhầm khi sửa.
 bindings = [
+  # ReceiveChar: không cho Alacritty xử lý, đẩy ký tự xuống terminal để tmux
+  # và nvim nhận được Cmd+F/B/T/N.
   { key = "F", mods = "Command", action = "ReceiveChar" },
   { key = "B", mods = "Command", action = "ReceiveChar" },
   { key = "T", mods = "Command", action = "ReceiveChar" },
   { key = "N", mods = "Command", action = "ReceiveChar" },
+
+  # Shift+Enter -> Esc + CR, để tool trong terminal phân biệt được với Enter.
+  { key = "Return", mods = "Shift", chars = "\u001B\r" },
 ]

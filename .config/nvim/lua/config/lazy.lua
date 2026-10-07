@@ -1,5 +1,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+-- `vim.uv`, không phải `vim.loop`: loop là alias deprecated từ 0.10. Các file
+-- khác trong config (treesitter.lua, neotest.lua) đã dùng vim.uv.
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",

@@ -1,6 +1,9 @@
 return {
   {
-    "telescope.nvim",
+    -- Ghi đủ `owner/repo`: dạng ngắn "telescope.nvim" chỉ resolve được vì
+    -- project-manager.lua khai đủ tên trong dependencies - tức thứ tự đọc file
+    -- trở thành dependency ngầm.
+    "nvim-telescope/telescope.nvim",
     dependencies = {
       {
         "nvim-telescope/telescope-fzf-native.nvim",

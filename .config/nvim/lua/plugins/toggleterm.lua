@@ -1,5 +1,7 @@
 return {
-  "akinsho/nvim-toggleterm.lua",
+  -- Tên repo hiện tại là `toggleterm.nvim` (README của chính plugin dùng tên
+  -- này); `nvim-toggleterm.lua` là tên cũ, đang chạy nhờ GitHub redirect.
+  "akinsho/toggleterm.nvim",
   keys = {
     {
       "<leader>t",
