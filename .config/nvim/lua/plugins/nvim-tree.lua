@@ -29,15 +29,16 @@ return {
   "nvim-tree/nvim-tree.lua",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFile" },
+  -- `<leader>E` / `<leader>Q` đã xoá: chúng trỏ cùng command với `<leader>e` /
+  -- `<leader>q` (4 phím cho 2 hành động). Hai phím hoa giờ còn trống.
   keys = {
     { "<leader>e", "<cmd>NvimTreeOpen<CR>", desc = "NvimTree Open" },
-    { "<leader>E", "<cmd>NvimTreeOpen<CR>", desc = "NvimTree Open" },
     { "<leader>q", "<cmd>NvimTreeClose<CR>", desc = "NvimTree Close" },
-    { "<leader>Q", "<cmd>NvimTreeClose<CR>", desc = "NvimTree Close" },
   },
   opts = {
     root_dirs = {},
-    hijack_netrw = true,
+    -- `hijack_netrw = true` đã xoá: netrw đã bị tắt hẳn ở config/options.lua
+    -- (loaded_netrw + loaded_netrwPlugin) nên không còn gì để hijack.
     hijack_cursor = false,
     sync_root_with_cwd = false,
     respect_buf_cwd = false,

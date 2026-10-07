@@ -30,24 +30,34 @@ return {
     },
   },
   config = function()
+    -- Keymap mode `t` phải gắn vào CHÍNH buffer terminal. Trước đây chúng được
+    -- set với `{ buffer = 0 }` ngay trong `config`, nghĩa là gắn vào buffer
+    -- đang current lúc plugin load (file source đầu tiên) - nên chưa bao giờ
+    -- chạy. `on_open` cho đúng `term.bufnr`.
+    local function term_keymaps(bufnr)
+      local function map(lhs, rhs)
+        vim.keymap.set("t", lhs, rhs, { buffer = bufnr, silent = true })
+      end
+      map("jk", [[<C-\><C-n>]])
+      map("<C-h>", [[<Cmd>wincmd h<CR>]])
+      map("<C-j>", [[<Cmd>wincmd j<CR>]])
+      map("<C-k>", [[<Cmd>wincmd k<CR>]])
+      map("<C-l>", [[<Cmd>wincmd l<CR>]])
+      map("<C-w>", [[<C-\><C-n><C-w>]])
+    end
+
     require("toggleterm").setup({
       shade_terminals = false,
       auto_scroll = false,
       autochdir = true,
       on_open = function(term)
         vim.g.self_toggleterm_window_id = vim.api.nvim_get_current_win()
+        term_keymaps(term.bufnr)
       end,
       on_close = function(term)
         vim.g.self_toggleterm_window_id = -1
       end,
     })
-    local opts = { buffer = 0 }
-    vim.keymap.set("t", "jk", [[<C-\><C-n>]], opts)
-    vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
-    vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
-    vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
-    vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
-    vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
 
     -- -- We can use <esc><esc> to be able to use a single <esc> in the terminal Vi mode.
     -- -- vim.api.nvim_buf_set_keymap(0, "t", "<esc><esc>", [[<C-\><C-o>:ToggleTerm<CR>]], { noremap = true })

@@ -14,6 +14,23 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- ---------------------------------------------------------------------------
+-- Spell check: chỉ cho văn bản, không cho code
+-- ---------------------------------------------------------------------------
+-- `vim.opt.spell = true` global tốn ~17ms startup (nạp spell file) và gạch đỏ
+-- mọi identifier trong code. Chỉ bật ở nơi nó thật sự có ích.
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("ui.spell", { clear = true }),
+  pattern = { "markdown", "mdx", "gitcommit", "gitrebase", "text", "tex", "typst" },
+  callback = function()
+    -- `spell` là option window-local (không phải buffer-local) nên phải dùng
+    -- opt_local / wo, `vim.bo[...].spell` sẽ ném E5108.
+    vim.opt_local.spell = true
+    -- Không gạch đỏ URL / từ trong code block.
+    vim.opt_local.spelloptions:append("noplainbuffer")
+  end,
+})
+
+-- ---------------------------------------------------------------------------
 -- Format on save cho Go / Rust
 -- ---------------------------------------------------------------------------
 -- Chỉ bật cho 2 ngôn ngữ này vì cả hai đều có đúng một formatter chính chủ,

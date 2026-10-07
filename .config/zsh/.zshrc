@@ -117,6 +117,40 @@ alias edit-dotfile="nvim ~/Desktop/personal-dev-config/dotfiles/.config/"
 # # alias ohmyzsh="mate ~/.oh-my-zsh"
 # fpath+=${ZDOTDIR:-~}/.zsh_functions
 #
+# ---- Editor ----
+# Không có cái này thì `git commit`, `crontab -e`, `fc` đều mở `vi`.
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# ---- History ----
+# oh-my-zsh (đã tắt ở trên) trước đây lo phần này. Không có nó thì zsh chỉ
+# nhận HISTSIZE=2000/SAVEHIST=1000 từ /etc/zshrc của macOS - quá nhỏ, và
+# ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd ở dưới cần history dày mới hữu ích.
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY        # lưu kèm timestamp (match_prev_cmd cần)
+setopt INC_APPEND_HISTORY      # ghi ngay, không chờ shell thoát
+setopt SHARE_HISTORY           # chia sẻ history giữa các pane tmux
+setopt HIST_IGNORE_ALL_DUPS    # lệnh trùng chỉ giữ bản mới nhất
+setopt HIST_IGNORE_SPACE       # lệnh bắt đầu bằng space thì không lưu
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY             # expand `!!` ra để xem trước khi chạy
+
+# ---- Completion system ----
+# zinit KHÔNG tự gọi compinit (khác oh-my-zsh). Thiếu nó thì `compdef` không
+# tồn tại -> 0 completion cho git/go/cargo/docker, và `**<TAB>` của fzf chết.
+# `-C` bỏ qua security check của dump cache (~50ms); chỉ check đầy đủ khi
+# cache đã cũ hơn 24h.
+autoload -Uz compinit
+_zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+if [[ -n "$_zcompdump"(#qN.mh-24) ]]; then
+  compinit -C -d "$_zcompdump"
+else
+  compinit -d "$_zcompdump"
+fi
+unset _zcompdump
+
 # ---- FZF -----
 
 # Set up fzf key bindings and fuzzy completion
@@ -150,7 +184,7 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-source ~/fzf-git.sh/fzf-git.sh
+[[ -f ~/fzf-git.sh/fzf-git.sh ]] && source ~/fzf-git.sh/fzf-git.sh
 
 show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
 
@@ -231,7 +265,9 @@ alias cls=_clean_screen
 #   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 # }
 
-nvm()  { _load_nvm; nvm "$@"; }
+# `nvm()  { _load_nvm; nvm "$@"; }` đã xoá: `_load_nvm` bị comment ở trên
+# nên hàm này tự gọi lại chính nó (đệ quy vô hạn). Lazy-load nvm thật nằm ở
+# khối `zi ice wait lucid atload` phía dưới.
 # node() { _load_nvm; node "$@"; }
 # npm()  { _load_nvm; npm "$@"; }
 # npx()  { _load_nvm; npx "$@"; }
@@ -325,16 +361,26 @@ zi light zdharma-continuum/fast-syntax-highlighting
 
 # ---- Lazy load nvm
 export NVM_DIR="$HOME/.nvm"
-zi ice wait lucid atload="
+zi ice wait lucid atload='
   unset -f nvm
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-"
+'
 zi snippet /dev/null
 # ---- Lazy load nvm
 #
+# compinit đã chạy sớm (phía trên, trước fzf) nên zinit chỉ *ghi lại* các
+# lệnh `compdef` của plugin thay vì áp dụng ngay -> replay ở đây.
+zinit cdreplay -q
+
 ### Zinit load plugin END
 
 ### Ripgrep config -----
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+# `typeset -U path`: mỗi shell lồng nhau (pane tmux mới, subshell) đều source
+# lại file này và `export PATH="...:$PATH"` sẽ nối thêm -> PATH phình dần.
+# `-U` giữ path là mảng unique, tự loại trùng.
+typeset -U path PATH
+
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:$(go env GOPATH)/bin
+# Hardcode thay vì `$(go env GOPATH)`: cái đó spawn `go` mỗi lần mở shell.
+export PATH="$PATH:${GOPATH:-$HOME/go}/bin"

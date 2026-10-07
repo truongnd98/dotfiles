@@ -18,7 +18,9 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	install = { colorscheme = { "gruvbox" } },
+	-- Colorscheme lazy.nvim dùng cho UI lúc cài plugin. Trước đây là "gruvbox"
+	-- - theme đó không được cài, nên lazy fallback về habamax.
+	install = { colorscheme = { "aurora" } },
 	defaults = {
 		lazy = false,
 		version = false,
@@ -67,8 +69,11 @@ require("lazy").setup({
 		},
 	},
 	debug = false,
+  -- Để `false` cho dùng hằng ngày: `require = true` bọc mọi lệnh require để
+  -- đo thời gian, tức là trả overhead đó ở mọi lần khởi động. Bật tạm khi cần
+  -- chạy `:Lazy profile`.
   profiling = {
     loader = false,
-    require = true,
+    require = false,
   },
 })

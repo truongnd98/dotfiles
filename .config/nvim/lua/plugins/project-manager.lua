@@ -5,13 +5,9 @@ return {
 		"nvim-tree/nvim-web-devicons",
 		"nvim-telescope/telescope.nvim",
 	},
-	keys = {
-		-- {
-		-- 	"<leader>d",
-		-- 	"<cmd>Telescope project-manager find_files cwd=~/Desktop/ hidden=true no_ignore=true<cr>",
-		-- 	desc = "",
-		-- },
-	},
+	-- `keys = {}` rỗng đã xoá (nó không lazy-load gì cả vì `event = "VeryLazy"`
+	-- phía dưới mới là thứ quyết định). Plugin dùng qua `:Telescope
+	-- project-manager ...`; muốn có phím thì thêm vào `keys` và bỏ `event`.
 	config = function()
 		require("project-manager").setup({
 			fd = {

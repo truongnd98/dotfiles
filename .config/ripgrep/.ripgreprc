@@ -2,12 +2,6 @@
 #           PERFORMANCE OPTIMIZATIONS        #
 ##############################################
 
-# Use fast memory-mapped I/O when available
---mmap
-
-# Search only text, skip binary detection overhead
---text
-
 # Use smart-case for intuitive behavior without loss of speed
 --smart-case
 
@@ -17,12 +11,6 @@
 # Show only the matching lines (faster and cleaner)
 --no-heading
 --line-number
-
-# Use 8 threads by default (good for most multi-core CPUs)
---threads=8
-
-# Avoid extremely large files unless explicitly searching them
---max-filesize=1M
 
 
 ##############################################
@@ -46,8 +34,8 @@
 --glob=!*.tsbuildinfo
 
 # Go
---glob=!bin/
---glob=!pkg/
+# KHÔNG loại `pkg/` và `bin/`: trong layout Go chuẩn `pkg/` là source code
+# (và `bin/` có thể là package path). Build output của Go đã nằm ngoài repo.
 --glob=!*.test
 
 # Rust

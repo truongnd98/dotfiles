@@ -25,8 +25,14 @@ return {
       -- search_paths = { vim.g.vscode_snippets_path },
     },
     keymap = {
-      ["<Tab>"] = { "select_next", "fallback" },
-      ["<S-Tab>"] = { "select_prev", "fallback" },
+      -- `snippet_forward` phải đứng TRƯỚC `select_next`: không có nó thì không
+      -- có phím nào nhảy giữa các placeholder của snippet - mà config này bật
+      -- `usePlaceholders` (gopls), `callSnippet = "Replace"` (lua_ls) và
+      -- `auto_brackets`, tức là liên tục sinh ra snippet có placeholder.
+      -- Thứ tự: đang trong snippet -> nhảy; menu đang mở -> chọn dòng kế;
+      -- còn lại -> fallback (indent như <Tab> thường).
+      ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+      ["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
       ["<Up>"] = { "select_prev", "fallback" },
       ["<Down>"] = { "select_next", "fallback" },
       ["<CR>"] = { "accept", "fallback" },

@@ -85,8 +85,10 @@ keymap.set("n", "<Leader>O", "O<Esc>^Da", opts)
 -- keymap.set("n", "<C-m>", "<C-i>", opts)
 
 -- Split window
-keymap.set("n", "sd", ":split", opts)
-keymap.set("n", "sv", ":vsplit", opts)
+-- `<cmd>...<cr>` thay vì `:split` (thiếu <cr> nên trước đây chỉ đổ text vào
+-- cmdline rồi đứng đó); dạng <cmd> cũng không bị ăn count/register đang chờ.
+keymap.set("n", "sd", "<cmd>split<cr>", opts)
+keymap.set("n", "sv", "<cmd>vsplit<cr>", opts)
 -- Move window
 keymap.set("n", "sh", "<C-w>h")
 keymap.set("n", "sk", "<C-w>k")

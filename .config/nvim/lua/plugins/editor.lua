@@ -17,8 +17,18 @@ return {
           wrap_results = false,
           layout_strategy = "horizontal",
           borderchars = { "━", "┃", "━", "┃","┏", "┓", "┛", "┗" },
-          -- `!.git` cần thiết vì <leader>fs truyền `--hidden` cho rg.
-          vimgrep_arguments = { "rg", "--vimgrep", "--glob", "!.git/*" },
+          -- Override `vimgrep_arguments` làm mất default của telescope:
+          --   { "rg", "--color=never", "--no-heading", "--with-filename",
+          --     "--line-number", "--column", "--smart-case" }
+          -- `--vimgrep` đã gộp no-heading/with-filename/line-number/column,
+          -- nhưng `--smart-case` và `--color=never` thì không. Phải ghi lại:
+          --   - `--smart-case`: trước đây vẫn chạy nhờ ~/.ripgreprc, tức là
+          --     phụ thuộc ngầm vào một file ngoài repo nvim.
+          --   - `--color=never`: docs telescope yêu cầu tường minh vì nó chưa
+          --     interpret ANSI color code.
+          vimgrep_arguments = {
+            "rg", "--vimgrep", "--smart-case", "--color=never", "--glob", "!.git/*",
+          },
           -- layout_config = { prompt_position = "top" },
           path_display = { truncate = 3 },
           -- sorting_strategy = "ascending",
@@ -32,6 +42,15 @@ return {
           },
         },
         pickers = {
+          buffers = {
+            sort_mru = true,          -- buffer vừa dùng lên đầu
+            sort_lastused = true,
+            ignore_current_buffer = true,
+            mappings = {
+              i = { ["<C-d>"] = "delete_buffer" },
+              n = { ["dd"] = "delete_buffer" },
+            },
+          },
           diagnostics = {
             theme = "ivy",
             initial_mode = "normal",
@@ -91,6 +110,32 @@ return {
         end,
         { desc = "Fuzzy find files in cwd (kể cả file bị ignore)" }
       )
+
+      -- Buffer picker: với >10 buffer đang mở thì nhanh hơn <C-j>/<C-k> tuần
+      -- tự rất nhiều. `<C-d>` (insert) / `dd` (normal) để đóng buffer tại chỗ.
+      keymap.set("n", "<leader>fb", function()
+        require("telescope.builtin").buffers()
+      end, { desc = "Find buffers" })
+
+      -- File đã mở gần đây, kể cả ở project khác.
+      keymap.set("n", "<leader>fo", function()
+        require("telescope.builtin").oldfiles()
+      end, { desc = "Find recently opened files" })
+
+      -- Mở lại picker vừa rồi, giữ nguyên query + vị trí con trỏ. Rất đáng
+      -- có khi đang lần theo một chuỗi kết quả grep trong codebase lớn.
+      keymap.set("n", "<leader>fr", function()
+        require("telescope.builtin").resume()
+      end, { desc = "Resume last picker" })
+
+      -- Grep thẳng từ dưới con trỏ (normal) hoặc vùng đang chọn (visual),
+      -- không phải gõ lại.
+      keymap.set("n", "<leader>fg", function()
+        require("telescope.builtin").grep_string()
+      end, { desc = "Grep word under cursor" })
+      keymap.set("v", "<leader>fg", function()
+        require("telescope.builtin").grep_string()
+      end, { desc = "Grep selection" })
 
       -- disable keymap <leader><leader>
       keymap.set("n", "<leader><leader>", "<nop>", { desc = "Disable <leader><leader>", nowait = true })

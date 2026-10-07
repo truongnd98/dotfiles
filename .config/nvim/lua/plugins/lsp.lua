@@ -13,6 +13,9 @@ return {
 				"lua-language-server",
 				--
 				"shfmt",
+				-- none-ls chỉ khai đúng một source là prettier; thiếu binary thì
+				-- <leader>cf trên TS/JS/JSON/YAML/MD im lặng không làm gì.
+				"prettier",
 				-- -- for ts/js
 				-- -- "typescript-language-server",
 				-- "ts_ls",
@@ -77,32 +80,42 @@ return {
       -- rustaceanvim tự quản lý rust-analyzer (client name `rust-analyzer`).
       -- Nếu để mason-lspconfig enable thêm `rust_analyzer` sẽ có 2 client
       -- cùng attach vào buffer Rust -> duplicate diagnostics & code action.
-      automatic_enable = { exclude = { "rust_analyzer" } },
+      -- `tsgo`: mason map package `tsgo` -> server `tsgo`, mà `tsgo` là alias
+      -- deprecated của `tsc`. Để nó tự enable thì vừa có deprecation warning
+      -- mỗi lần mở file TS, vừa bỏ qua config mình đặt cho `tsc` (và nếu bật
+      -- cả hai thì 2 client cùng chạy tsgo).
+      automatic_enable = { exclude = { "rust_analyzer", "tsgo" } },
     },
   },
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      capabilities.textDocument.semanticTokens = {
-        dynamicRegistration = false,
-        requests = {
-          range = true,
-          full = {
-            delta = true
-          }
-        },
-        tokenTypes = {},
-        tokenModifiers = {},
-        formats = { "relative" },
-        overlappingTokenSupport = true,
-        multilineTokenSupport = true,
-      }
+      -- mason.nvim prepend `<data>/mason/bin` vào PATH lúc nó setup, nhưng nó
+      -- load muộn hơn file này (qua mason-lspconfig ở BufReadPre). Nghĩa là mọi
+      -- `vim.fn.executable(...)` dưới đây chạy khi PATH CHƯA có mason -> luôn
+      -- trả 0, và các nhánh gate không bao giờ đúng (đã verify:
+      -- executable("tsgo") = 0 lúc VimEnter dù tsgo đã cài qua Mason).
+      -- Prepend tay ở đây rẻ hơn là ép mason load eager chỉ để lấy PATH.
+      local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+      if vim.fn.isdirectory(mason_bin) == 1 and not vim.env.PATH:find(mason_bin, 1, true) then
+        vim.env.PATH = mason_bin .. ":" .. vim.env.PATH
+      end
+
+      -- capabilities áp một lần cho MỌI server qua `'*'`, thay vì nhắc lại
+      -- `capabilities = capabilities` ở từng config.
+      --
+      -- Block `capabilities.textDocument.semanticTokens = { ..., tokenTypes = {},
+      -- tokenModifiers = {}, ... }` cũ đã xoá: khai hai mảng đó RỖNG là nói với
+      -- server "client không hỗ trợ loại token nào" - đánh nhau trực tiếp với
+      -- `semanticTokens = true` đang bật cho gopls. Default của Nvim
+      -- (`vim.lsp.protocol.make_client_capabilities()`) đã điền đúng danh sách
+      -- tokenTypes/tokenModifiers mà Nvim biết highlight.
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+      vim.lsp.config("*", { capabilities = capabilities })
 
       -- lua
       vim.lsp.enable("lua_ls")
       vim.lsp.config["lua_ls"] = {
-        capabilities = capabilities,
         settings = {
           Lua = {
             hint = { enable = false },
@@ -125,11 +138,12 @@ return {
         },
       }
       -- typescript
-      vim.lsp.enable("ts_ls")
-      vim.lsp.config["ts_ls"] = {
-        capabilities = capabilities,
-        -- cmd = { "typescript-language-server", "--stdio", "--max-old-space-size=4096" },
-        cmd = { "tsgo", "lsp" },
+      -- Tên config đúng cho tsgo (TypeScript native-preview) là `tsc`, KHÔNG
+      -- phải `ts_ls`. `lsp/tsc.lua` tự dò binary (`tsc` rồi `tsgo`, ưu tiên
+      -- node_modules/.bin của project) nên không override `cmd` ở đây.
+      -- Tên `tsgo` vẫn chạy nhưng đã deprecated và sẽ bị bỏ ở nvim-lspconfig
+      -- 3.0.0 - nó chỉ là alias gọi vào `tsc` kèm vim.deprecate().
+      local ts_settings = {
         flags = {
           debounce_text_changes = 100,
         },
@@ -142,14 +156,50 @@ return {
           },
         },
       }
-      -- Js
-      vim.lsp.enable("eslint")
+      local ts_server = nil
+      if vim.fn.executable("tsgo") == 1 or vim.fn.executable("tsc") == 1 then
+        ts_server = "tsc"
+      elseif vim.fn.executable("typescript-language-server") == 1 then
+        ts_server = "ts_ls"
+      end
+      if ts_server then
+        vim.lsp.config[ts_server] = ts_settings
+        vim.lsp.enable(ts_server)
+      end
+
+      -- Js: eslint dùng `vscode-eslint-language-server` (mason: `eslint-lsp`).
+      local has_eslint = vim.fn.executable("vscode-eslint-language-server") == 1
+      if has_eslint then
+        vim.lsp.enable("eslint")
+      end
+
+      -- Thiếu tool thì nói ra, một lần, lúc thật sự mở file TS/JS.
+      if not ts_server or not has_eslint then
+        vim.api.nvim_create_autocmd("FileType", {
+          group = vim.api.nvim_create_augroup("lsp.ts_missing_tools", { clear = true }),
+          pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+          once = true,
+          callback = function()
+            local missing = {}
+            if not ts_server then
+              table.insert(missing, "tsgo (hoặc typescript-language-server)")
+            end
+            if not has_eslint then
+              table.insert(missing, "eslint-lsp")
+            end
+            vim.notify(
+              "LSP cho TS/JS chưa đủ tool: " .. table.concat(missing, ", ")
+                .. "\nChạy `:MasonInstallAll` (hoặc `:Mason`) để cài.",
+              vim.log.levels.WARN
+            )
+          end,
+        })
+      end
       -- -- yaml
       -- vim.lsp.enable("yamlls")
       -- golang
       vim.lsp.enable("gopls")
       vim.lsp.config["gopls"] = {
-        capabilities = capabilities,
         -- `go.work` trước `go.mod` để multi-module workspace chỉ chạy 1 gopls.
         root_markers = { "go.work", "go.mod", ".git" },
         settings = {
@@ -197,7 +247,6 @@ return {
         vim.lsp.enable("golangci_lint_ls")
       end
       vim.lsp.config["golangci_lint_ls"] = {
-        capabilities = capabilities,
         filetypes = { "go", "gomod" },
         root_markers = { "go.work", "go.mod", ".git" },
         init_options = {
@@ -214,10 +263,8 @@ return {
       }
 
       -- toml (Cargo.toml, rustfmt.toml, .golangci.toml)
+      -- taplo không cần tuỳ biến gì thêm; capabilities đã vào qua '*'.
       vim.lsp.enable("taplo")
-      vim.lsp.config["taplo"] = {
-        capabilities = capabilities,
-      }
 
       -- rust: KHÔNG cấu hình ở đây. rustaceanvim (lua/plugins/rust.lua) tự
       -- start rust-analyzer với project/toolchain detection riêng.

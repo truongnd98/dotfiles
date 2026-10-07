@@ -10,9 +10,8 @@ return {
       render = function(props)
         local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
 
-        if filename == "neo-tree filesystem [1]" then
-          return
-        end
+        -- Check `filename == "neo-tree filesystem [1]"` đã xoá: config này dùng
+        -- nvim-tree, không có neo-tree.
 
         if filename == "" then
           filename = "[no name]"

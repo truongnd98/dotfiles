@@ -7,7 +7,9 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.editorconfig = true
 
 vim.g.mapleader = " "
-vim.g.autoformat = false
+-- `vim.g.autoformat = false` đã xoá: đó là biến của LazyVim, config này không
+-- dùng LazyVim. Format-on-save ở đây do config/autocmds.lua lo, tắt bằng
+-- `:FormatToggle`.
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -29,7 +31,10 @@ vim.opt.smartcase = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
--- 🌟 FIX LỖI SYMLINK: Bắt buộc Neovim dùng cơ chế copy khi ghi đè qua liên kết đường dẫn
+-- Symlink: giữ inode khi ghi (dotfiles ở đây được symlink vào $HOME).
+-- Lưu ý `backup`/`writebackup` đều đã tắt ở dưới, mà khi không có backup thì
+-- Nvim ghi đè in-place nên symlink vốn đã an toàn - dòng này chỉ là lưới an
+-- toàn nếu sau này bật lại writebackup.
 vim.opt.backupcopy = "yes"
 
 vim.opt.showcmd = true
@@ -72,8 +77,10 @@ vim.opt.termguicolors = true
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
 vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
--- Enable spell check
-vim.opt.spell = true
+-- Spell check: `spelllang` để global, nhưng KHÔNG bật `spell` ở đây.
+-- Hai lý do: (1) nó tốn ~17ms startup vì phải nạp spell file, bằng ~18% tổng
+-- thời gian khởi động; (2) bật cho code là sai - `fn`, `buf`, `str`, `nvim`,
+-- `impl` đều bị gạch đỏ. Bật theo filetype ở config/autocmds.lua.
 vim.opt.spelllang = { "en_us" }
 
 -- Add asterisks in block comments
@@ -89,16 +96,26 @@ g.loaded_ruby_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
 
-g.lazyvim_blink_main = false
-
+-- Tắt runtime plugin không dùng. Danh sách này phải khớp với
+-- $VIMRUNTIME/plugin/ của Nvim 0.12, nếu không thì chỉ là set biến vô nghĩa.
+-- Đã bỏ khỏi danh sách cũ vì KHÔNG tồn tại trong Nvim (chúng là runtime file
+-- của Vim): zip, tar, getscript, getscriptPlugin, vimball, vimballPlugin,
+-- synmenu, optwin, compiler, bugreport, ftplugin.
+-- Và `rplugin` sai tên biến: rplugin.vim kiểm tra `g:loaded_remote_plugins`,
+-- nên remote plugin trước giờ vẫn được load.
+-- Giữ lại `man`, `spellfile`, `osc52`, `editorconfig`, `shada`: đều hữu ích.
 local disabled_built_ins = {
-  "gzip", "zip", "zipPlugin", "tar", "tarPlugin", "getscript",
-  "getscriptPlugin", "vimball", "vimballPlugin", "matchit",
-  "matchparen", "netrw", "netrwPlugin", "rplugin",
-  "synmenu", "optwin", "compiler", "bugreport", "ftplugin",
+  "gzip",
+  "zipPlugin",
+  "tarPlugin",
+  "matchit",
+  "matchparen",        -- blink.pairs lo matchparen (xem plugins/blink-pairs.lua)
+  "netrwPlugin",       -- nvim-tree thay thế
+  "remote_plugins",    -- provider python/ruby/perl/node đều đã tắt ở trên
+  "tutor_mode_plugin",
 }
 
-for _, plugin in pairs(disabled_built_ins) do
+for _, plugin in ipairs(disabled_built_ins) do
   vim.g["loaded_" .. plugin] = 1
 end
 
@@ -122,9 +139,13 @@ vim.opt.backup = false         -- nobackup: Không giữ lại file backup sau k
 vim.opt.undofile = true
 vim.opt.undolevels = 10000
 
--- 🌟 LƯU Ý CHO NVIM v0.12+: KHÔNG tắt hoàn toàn shada bằng chuỗi rỗng ("") 
--- vì nó sẽ làm mất các tính năng cốt lõi của LazyVim (như lưu trạng thái UI, lịch sử lệnh cũ).
--- Thay vào đó, cấu hình nhẹ để tăng tốc:
+-- KHÔNG tắt hoàn toàn shada bằng chuỗi rỗng (""): mất luôn marks, jumplist
+-- giữa các session, lịch sử lệnh và register. Cấu hình nhẹ thay vì tắt:
+--   !     lưu biến global VIẾT HOA
+--   '10   10 file trong oldfiles (telescope <leader>fo đọc cái này)
+--   <50   tối đa 50 dòng mỗi register
+--   s10   bỏ qua item > 10KB
+--   h     không lưu hlsearch
 vim.opt.shada = "!,'10,<50,s10,h"
 
 -- Tự động thêm dòng trống ở cuối file khi lưu

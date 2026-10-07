@@ -6,30 +6,26 @@ return {
     -- add this plugin as dependency for lualine
     "bwpge/lualine-pretty-path",
   },
-  init = function()
-    vim.g.lualine_laststatus = vim.o.laststatus
-    if vim.fn.argc(-1) > 0 then
-      -- set an empty statusline till lualine loads
-      vim.o.statusline = " "
-    else
-      -- hide the statusline on the starter page
-      vim.o.laststatus = 0
-    end
-  end,
+  -- Khối `init` cũ (ẩn statusline rồi khôi phục qua vim.g.lualine_laststatus)
+  -- đã xoá: nó là pattern của LazyVim để tránh nháy statusline trên trang
+  -- dashboard - config này không có dashboard/alpha/starter nào.
   opts = function()
-    vim.o.laststatus = vim.g.lualine_laststatus
-
     local opts = {
       options = {
         theme = "auto",
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
         globalstatus = vim.o.laststatus == 3,
-        disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
+        -- `disabled_filetypes = { "dashboard", "alpha", "ministarter" }` đã xoá:
+        -- không plugin nào trong số đó được cài.
+        --
+        -- refresh 300ms -> 1000ms: thứ duy nhất cần nhịp nhanh ở đây là đồng hồ
+        -- trong lualine_z, mà nó chỉ hiện tới phút. 300ms nghĩa là vẽ lại
+        -- statusline hơn 3 lần/giây vĩnh viễn.
         refresh = {
-          statusline = 300,
-          tabline = 300,
-          winbar = 300,
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
         },
       },
       sections = {
