@@ -21,11 +21,16 @@ keymap.set("v", "<Leader>D", '"_D')
 keymap.set("n", "+", "<C-a>")
 keymap.set("n", "-", "<C-x>")
 
--- Delete inner word
-keymap.set("n", "dw", 'viw"_d')
--- Delete after cursor
-keymap.set("n", "de", 'v$h"_d')
--- `ds` (delete before cursor) đã bỏ: nvim-surround chiếm `ds` cho
+-- `dw` (-> viw"_d) và `de` (-> v$h"_d) đã bỏ: chúng phá tính composable của
+-- operator `d`. `d` + motion là nền tảng của vim, nhưng khi `dw` là một
+-- mapping thì `2dw` trở thành `2viw"_d` và `d2w` cũng không còn đúng.
+-- Dùng `diw` / `d$` thay thế: hành vi y hệt mà ghép được với count.
+--
+-- Hai map đó còn xoá vào black-hole register để không clobber unnamed
+-- register; vai trò đó giờ do `<Leader>p` (-> "0p) đảm nhiệm - paste từ yank
+-- register nên delete có clobber unnamed cũng không ảnh hưởng.
+--
+-- `ds` (delete before cursor) đã bỏ từ trước: nvim-surround chiếm `ds` cho
 -- <Plug>(nvim-surround-delete) nên map này không bao giờ chạy. Dùng `d^`.
 
 -- Escape ký tự có nghĩa đặc biệt trong regex Vim trước khi nhét text đã chọn
@@ -114,12 +119,28 @@ keymap.set("n", "<C-j>", ":bprevious<cr>")
 keymap.set("n", "<C-k>", ":bnext<cr>")
 keymap.set("n", "<C-l>", ":blast<cr>")
 
---Move selected lines
-vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv")
-vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
+-- Move line / selection
+--
+-- Normal mode dùng `<A-k>`/`<A-j>`, KHÔNG dùng `K`/`J` nữa:
+--  - `K` global làm Nvim không thể gắn LSP hover. Điều kiện ở
+--    vim/lsp.lua:866-869 là `maparg("K", "n") == ""`, nên chỉ cần không map
+--    `K` là `K` tự thành `vim.lsp.buf.hover()` (buffer-local) khi client
+--    attach. `<leader>i` vẫn giữ nguyên như một lối thứ hai.
+--  - `J` global làm mất join-lines, mà không có phím nào thay.
+--
+-- Visual mode giữ `K`/`J` vì move-selection bằng K/J gần như đã là convention,
+-- và ở visual mode chúng không che builtin nào quan trọng. `<A-k>`/`<A-j>`
+-- thêm vào làm alias để cùng một phản xạ dùng được ở cả hai mode.
+--
+-- macOS/Alacritty: `option_as_alt = "Both"` trong alacritty.toml là điều kiện
+-- để `<A-...>` tới được Neovim.
+vim.keymap.set("n", "<A-k>", ":m -2<cr>==", opts)
+vim.keymap.set("n", "<A-j>", ":m +1<cr>==", opts)
 
-vim.keymap.set("n", "K", ":m -2<cr>==")
-vim.keymap.set("n", "J", ":m +1<cr>==")
+vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", opts)
+vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", opts)
+vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", opts)
+vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", opts)
 
 -- Quickfix: KHÔNG map gì ở đây.
 --
