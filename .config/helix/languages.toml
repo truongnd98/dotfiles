@@ -1,0 +1,23 @@
+[[language]]
+name = "javascript"
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "file.js"] }
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "typescript"
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "file.ts"] }
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "tsx"
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "file.tsx"] }
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "jsx"
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "file.jsx"] }
+language-servers = ["typescript-language-server"]

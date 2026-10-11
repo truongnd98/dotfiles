@@ -1,2 +1,6 @@
-# Ignore Alacritty themes folder
+# Alacritty themes: là git clone riêng từ alacritty/alacritty-theme,
+# install.sh sẽ clone lại. Không vendor vào repo này.
 .config/alacritty/themes
+
+# macOS
+.DS_Store

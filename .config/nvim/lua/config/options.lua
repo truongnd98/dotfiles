@@ -86,8 +86,14 @@ vim.opt.spelllang = { "en_us" }
 -- Add asterisks in block comments
 vim.opt.formatoptions:append({ "r" })
 
--- Allow Neovim to read local .vimrc and .exrc files in the current directory
-vim.opt.exrc = true
+-- `exrc` TẮT. Nvim có gate bằng vim.secure (hỏi trust trước khi chạy) nên
+-- không phải lỗ hổng thẳng, nhưng nghĩa là: clone một repo lạ, mở nvim, và chỉ
+-- còn cách một lần bấm "y" bất cẩn là chạy Lua tuỳ ý của người khác với full
+-- quyền của mình. Trust DB (~/.local/share/nvim/trust) đang trống và không có
+-- file .nvim.lua nào trong các project -> tính năng này chưa từng được dùng,
+-- nên không mất gì.
+-- Cần per-project config thì bật lại có chủ đích: `:set exrc` rồi `:e .nvim.lua`.
+vim.opt.exrc = false
 
 local g = vim.g
 
