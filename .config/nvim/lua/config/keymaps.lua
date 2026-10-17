@@ -159,6 +159,12 @@ keymap.set("n", "<leader>s", vim.diagnostic.open_float, { desc = "Show diagnosti
 -- Remove highlight
 keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Remove highlight" })
 
+-- Tắt `<leader><leader>`: nó là prefix của <leader>f*/<leader>m*/... nên nếu
+-- để trống thì mỗi lần gõ leader hai lần sẽ chờ hết timeoutlen. (Trước đây map
+-- này nằm trong config của telescope - sai chỗ, và giữ telescope không lazy
+-- được.)
+keymap.set("n", "<leader><leader>", "<nop>", { desc = "Disable <leader><leader>", nowait = true })
+
 -- Format buffer thủ công (format-on-save cho Go/Rust nằm ở config/autocmds.lua)
 keymap.set("n", "<leader>cf", function()
   require("util.lsp").format()

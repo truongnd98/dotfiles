@@ -12,6 +12,11 @@ return {
     },
   },
 
+  -- Tự có trigger riêng: lspconfig require blink lúc BufReadPre, nhưng nếu mở
+  -- `nvim` không file rồi gõ vào buffer trống thì không có BufReadPre nào -
+  -- `InsertEnter`/`CmdlineEnter` đảm bảo vẫn có completion.
+  event = { "InsertEnter", "CmdlineEnter" },
+
   -- `version = '*'` -> lazy checkout release tag, blink tự tải binary fuzzy
   -- matcher dựng sẵn. KHÔNG thêm `build = require('blink.cmp').build()`:
   -- cái đó chạy `cargo build --release` (cần Rust nightly) cho một thứ đã có.

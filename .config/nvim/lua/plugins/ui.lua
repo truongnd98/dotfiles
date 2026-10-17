@@ -14,6 +14,9 @@ return {
   {
     "sphamba/smear-cursor.nvim",
     -- enabled = vim.env.TMUX == nil,
+    -- `defaults.lazy = false` nên không có dòng này là load ngay lúc khởi động.
+    -- Animation con trỏ không cần có mặt trước khi UI vẽ xong.
+    event = "VeryLazy",
     opts = {
       -- legacy_computing_symbols_support = true,
       -- distance_stop_animating_vertical_bar = 0.5,

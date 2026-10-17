@@ -16,12 +16,14 @@ return {
 				-- none-ls chỉ khai đúng một source là prettier; thiếu binary thì
 				-- <leader>cf trên TS/JS/JSON/YAML/MD im lặng không làm gì.
 				"prettier",
-				-- -- for ts/js
-				-- -- "typescript-language-server",
-				-- "ts_ls",
+				-- for ts/js
+				-- `typescript-language-server` (server name `ts_ls`) là LSP mặc định
+				-- cho TS/JS. Trước đây dùng `tsgo` (TypeScript native-preview): nhanh
+				-- hơn nhưng tên config trong nvim-lspconfig là `tsc`, còn `tsgo` chỉ là
+				-- alias deprecated sẽ bị bỏ ở lspconfig 3.0.0 - thêm một lớp lệch tên
+				-- không đáng đổi. Mason package `tsgo` đã gỡ.
+				"typescript-language-server",
 				"eslint-lsp",
-        -- tsgo_ls is a fork of ts_ls with better performance
-        "tsgo",
         -- "biome",
         -- "copilot-language-server",
         -- for golang
@@ -49,52 +51,76 @@ return {
     ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
       require("mason").setup(opts)
-      local mr = require("mason-registry")
 
+      -- KHÔNG `require("mason-registry")` ở đây. Nó kéo theo cả registry +
+      -- toàn bộ máy cài đặt (mason-registry.sources.github, mason-core.fetch,
+      -- installer.InstallLocation, installer.managers.powershell...) - đo được
+      -- ~116ms, tức phần lớn thời gian khởi động, cho thứ chỉ cần khi THỰC SỰ
+      -- cài package. Chỉ require bên trong `:MasonInstallAll`.
       vim.api.nvim_create_user_command("MasonInstallAll", function()
+        local mr = require("mason-registry")
+
+        -- Sau khi cài xong thì bắn lại FileType để LSP vừa cài attach vào
+        -- buffer đang mở, không phải restart nvim. Đăng ký ở đây thay vì lúc
+        -- setup vì handler này chỉ có ý nghĩa trong luồng cài đặt.
+        mr:on("package:install:success", function()
+          vim.defer_fn(function()
+            require("lazy.core.handler.event").trigger({
+              event = "FileType",
+              buf = vim.api.nvim_get_current_buf(),
+            })
+          end, 100)
+        end)
+
         mr.refresh(function()
           for _, tool in ipairs(opts.ensure_installed) do
-            local p = mr.get_package(tool)
-            if not p:is_installed() then
-              p:install()
+            local pkg = mr.get_package(tool)
+            if not pkg:is_installed() then
+              pkg:install()
             end
           end
         end)
-      end, {})
-
-      mr:on("package:install:success", function()
-        vim.defer_fn(function()
-          require("lazy.core.handler.event").trigger({
-            event = "FileType",
-            buf = vim.api.nvim_get_current_buf(),
-          })
-        end, 100)
-      end)
+      end, { desc = "Cài mọi tool trong ensure_installed" })
     end,
   },
   {
     "mason-org/mason-lspconfig.nvim",
+    -- `event` quan trọng cho startup: `defaults.lazy = false` (config/lazy.lua)
+    -- nghĩa là plugin nào KHÔNG có trigger lazy sẽ load ngay lúc khởi động.
+    -- Bỏ dòng này đi thì mason-lspconfig thành eager và kéo cả mason.nvim +
+    -- mason-registry vào startup - đo được +46ms khi mở file.
     event = { "BufReadPre", "BufNewFile" },
     opts = {
       ensure_installed = {},
       -- rustaceanvim tự quản lý rust-analyzer (client name `rust-analyzer`).
       -- Nếu để mason-lspconfig enable thêm `rust_analyzer` sẽ có 2 client
       -- cùng attach vào buffer Rust -> duplicate diagnostics & code action.
-      -- `tsgo`: mason map package `tsgo` -> server `tsgo`, mà `tsgo` là alias
-      -- deprecated của `tsc`. Để nó tự enable thì vừa có deprecation warning
-      -- mỗi lần mở file TS, vừa bỏ qua config mình đặt cho `tsc` (và nếu bật
-      -- cả hai thì 2 client cùng chạy tsgo).
-      automatic_enable = { exclude = { "rust_analyzer", "tsgo" } },
+      --
+      -- `tsgo` đã bỏ khỏi exclude vì package đó đã gỡ khỏi Mason. Nếu sau này
+      -- cài lại thì phải exclude lại: mason map package `tsgo` -> server
+      -- `tsgo` (alias deprecated của `tsc`), bật song song với `ts_ls` sẽ có
+      -- 2 client cùng attach vào buffer TS.
+      automatic_enable = { exclude = { "rust_analyzer" } },
     },
   },
   {
     "neovim/nvim-lspconfig",
+    -- Lazy theo buffer: `config` dưới đây gọi
+    -- `require("blink.cmp").get_lsp_capabilities()`, nên nếu để eager thì
+    -- lspconfig kéo luôn blink.cmp + LuaSnip vào startup (đo được ~20ms).
+    --
+    -- `BufReadPre`/`BufNewFile` vẫn chạy TRƯỚC `FileType`, mà `vim.lsp.enable()`
+    -- chỉ cần được gọi trước FileType để client start -> LSP vẫn attach bình
+    -- thường. Đánh đổi: keymap LSP global (gd/gr/<leader>i/...) chỉ tồn tại sau
+    -- khi đã mở file đầu tiên - vốn cũng là lúc duy nhất chúng có nghĩa.
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       -- mason.nvim prepend `<data>/mason/bin` vào PATH lúc nó setup, nhưng nó
       -- load muộn hơn file này (qua mason-lspconfig ở BufReadPre). Nghĩa là mọi
       -- `vim.fn.executable(...)` dưới đây chạy khi PATH CHƯA có mason -> luôn
       -- trả 0, và các nhánh gate không bao giờ đúng (đã verify:
-      -- executable("tsgo") = 0 lúc VimEnter dù tsgo đã cài qua Mason).
+      -- executable("typescript-language-server") = 0 lúc VimEnter dù nó đã cài
+      -- qua Mason).
       -- Prepend tay ở đây rẻ hơn là ép mason load eager chỉ để lấy PATH.
       local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
       if vim.fn.isdirectory(mason_bin) == 1 and not vim.env.PATH:find(mason_bin, 1, true) then
@@ -137,34 +163,27 @@ return {
           },
         },
       }
-      -- typescript
-      -- Tên config đúng cho tsgo (TypeScript native-preview) là `tsc`, KHÔNG
-      -- phải `ts_ls`. `lsp/tsc.lua` tự dò binary (`tsc` rồi `tsgo`, ưu tiên
-      -- node_modules/.bin của project) nên không override `cmd` ở đây.
-      -- Tên `tsgo` vẫn chạy nhưng đã deprecated và sẽ bị bỏ ở nvim-lspconfig
-      -- 3.0.0 - nó chỉ là alias gọi vào `tsc` kèm vim.deprecate().
-      local ts_settings = {
-        flags = {
-          debounce_text_changes = 100,
-        },
-        settings = {
-          typescript = {
-            inlayHints = { includeInlayParameterNameHints = "all" }
+      -- typescript / javascript
+      -- KHÔNG override `cmd`: `lsp/ts_ls.lua` tự dò
+      -- `<root>/node_modules/.bin/typescript-language-server` trước, rồi mới tới
+      -- PATH (bản Mason). Nhờ vậy mỗi project dùng đúng version TS của nó thay
+      -- vì một bản global - khác biệt quan trọng khi repo pin TS cũ.
+      local has_ts = vim.fn.executable("typescript-language-server") == 1
+      if has_ts then
+        vim.lsp.config["ts_ls"] = {
+          flags = {
+            debounce_text_changes = 100,
           },
-          javascript = {
-            inlayHints = { includeInlayParameterNameHints = "all" }
+          settings = {
+            typescript = {
+              inlayHints = { includeInlayParameterNameHints = "all" }
+            },
+            javascript = {
+              inlayHints = { includeInlayParameterNameHints = "all" }
+            },
           },
-        },
-      }
-      local ts_server = nil
-      if vim.fn.executable("tsgo") == 1 or vim.fn.executable("tsc") == 1 then
-        ts_server = "tsc"
-      elseif vim.fn.executable("typescript-language-server") == 1 then
-        ts_server = "ts_ls"
-      end
-      if ts_server then
-        vim.lsp.config[ts_server] = ts_settings
-        vim.lsp.enable(ts_server)
+        }
+        vim.lsp.enable("ts_ls")
       end
 
       -- Js: eslint dùng `vscode-eslint-language-server` (mason: `eslint-lsp`).
@@ -174,15 +193,15 @@ return {
       end
 
       -- Thiếu tool thì nói ra, một lần, lúc thật sự mở file TS/JS.
-      if not ts_server or not has_eslint then
+      if not has_ts or not has_eslint then
         vim.api.nvim_create_autocmd("FileType", {
           group = vim.api.nvim_create_augroup("lsp.ts_missing_tools", { clear = true }),
           pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
           once = true,
           callback = function()
             local missing = {}
-            if not ts_server then
-              table.insert(missing, "tsgo (hoặc typescript-language-server)")
+            if not has_ts then
+              table.insert(missing, "typescript-language-server")
             end
             if not has_eslint then
               table.insert(missing, "eslint-lsp")

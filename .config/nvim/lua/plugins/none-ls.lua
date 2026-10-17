@@ -3,7 +3,8 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  event = { "BufReadPre", "BufNewFile" },
+  optional = true,
+  -- event = { "BufReadPre", "BufNewFile" },
   config = function()
     local null_ls = require("null-ls")
 

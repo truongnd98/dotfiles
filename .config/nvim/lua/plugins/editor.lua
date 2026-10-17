@@ -11,6 +11,82 @@ return {
       },
       "nvim-telescope/telescope-ui-select.nvim",
     },
+    -- `defaults.lazy = false` (config/lazy.lua) nên không có `cmd`/`keys` là
+    -- telescope + 2 extension load ngay lúc khởi động. Khai keymap ở `keys`
+    -- thay vì trong `config` để lazy.nvim dựng map trước, chỉ nạp plugin khi
+    -- thực sự bấm.
+    cmd = "Telescope",
+    keys = {
+      -- `--hidden` để thấy .github/, .env.example...; `--exclude .git` để không
+      -- lội vào object của git. KHÔNG dùng `--no-ignore`: với repo Go/Rust nó
+      -- kéo cả `target/`, `vendor/`, `node_modules/` vào kết quả.
+      {
+        "<leader>ff",
+        function()
+          require("telescope.builtin").find_files({
+            find_command = {
+              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--exclude", ".git",
+            },
+          })
+        end,
+        desc = "Fuzzy find files in cwd",
+      },
+      {
+        "<leader>fs",
+        function()
+          require("telescope.builtin").live_grep({ hidden = true })
+        end,
+        desc = "Find string in cwd",
+      },
+      -- Khi thật sự cần tìm trong file bị .gitignore (build output, vendor).
+      {
+        "<leader>fa",
+        function()
+          require("telescope.builtin").find_files({
+            find_command = {
+              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--no-ignore",
+              "--exclude", ".git",
+            },
+          })
+        end,
+        desc = "Fuzzy find files in cwd (kể cả file bị ignore)",
+      },
+      -- Buffer picker: với >10 buffer đang mở thì nhanh hơn <C-j>/<C-k> tuần
+      -- tự rất nhiều. `<C-d>` (insert) / `dd` (normal) để đóng buffer tại chỗ.
+      {
+        "<leader>fb",
+        function()
+          require("telescope.builtin").buffers()
+        end,
+        desc = "Find buffers",
+      },
+      -- File đã mở gần đây, kể cả ở project khác.
+      {
+        "<leader>fo",
+        function()
+          require("telescope.builtin").oldfiles()
+        end,
+        desc = "Find recently opened files",
+      },
+      -- Mở lại picker vừa rồi, giữ nguyên query + vị trí con trỏ. Rất đáng có
+      -- khi đang lần theo một chuỗi kết quả grep trong codebase lớn.
+      {
+        "<leader>fr",
+        function()
+          require("telescope.builtin").resume()
+        end,
+        desc = "Resume last picker",
+      },
+      -- Grep thẳng từ dưới con trỏ (normal) hoặc vùng đang chọn (visual).
+      {
+        "<leader>fg",
+        function()
+          require("telescope.builtin").grep_string()
+        end,
+        mode = { "n", "v" },
+        desc = "Grep word under cursor / selection",
+      },
+    },
     config = function()
       local telescope = require("telescope")
 
@@ -73,75 +149,7 @@ return {
       pcall(telescope.load_extension, "fzf")
       pcall(telescope.load_extension, "ui-select")
 
-      -- set keymaps
-      local keymap = vim.keymap -- for conciseness
-
-      -- `--hidden` để thấy .github/, .env.example...; `--exclude .git` để không
-      -- lội vào object của git. KHÔNG dùng `--no-ignore`: với repo Go/Rust nó
-      -- kéo cả `target/`, `vendor/`, `node_modules/` vào kết quả.
-      keymap.set(
-        "n",
-        "<leader>ff",
-        function ()
-          require("telescope.builtin").find_files({
-            find_command = {
-              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--exclude", ".git",
-            },
-          })
-        end,
-        { desc = "Fuzzy find files in cwd" }
-      )
-      keymap.set(
-        "n",
-        "<leader>fs",
-        function ()
-          require("telescope.builtin").live_grep({ hidden = true })
-        end,
-        { desc = "Find string in cwd" }
-      )
-      -- Khi thật sự cần tìm trong file bị .gitignore (build output, vendor).
-      keymap.set(
-        "n",
-        "<leader>fa",
-        function ()
-          require("telescope.builtin").find_files({
-            find_command = {
-              "fd", "--type", "f", "--color", "never", "--follow", "--hidden", "--no-ignore",
-              "--exclude", ".git",
-            },
-          })
-        end,
-        { desc = "Fuzzy find files in cwd (kể cả file bị ignore)" }
-      )
-
-      -- Buffer picker: với >10 buffer đang mở thì nhanh hơn <C-j>/<C-k> tuần
-      -- tự rất nhiều. `<C-d>` (insert) / `dd` (normal) để đóng buffer tại chỗ.
-      keymap.set("n", "<leader>fb", function()
-        require("telescope.builtin").buffers()
-      end, { desc = "Find buffers" })
-
-      -- File đã mở gần đây, kể cả ở project khác.
-      keymap.set("n", "<leader>fo", function()
-        require("telescope.builtin").oldfiles()
-      end, { desc = "Find recently opened files" })
-
-      -- Mở lại picker vừa rồi, giữ nguyên query + vị trí con trỏ. Rất đáng
-      -- có khi đang lần theo một chuỗi kết quả grep trong codebase lớn.
-      keymap.set("n", "<leader>fr", function()
-        require("telescope.builtin").resume()
-      end, { desc = "Resume last picker" })
-
-      -- Grep thẳng từ dưới con trỏ (normal) hoặc vùng đang chọn (visual),
-      -- không phải gõ lại.
-      keymap.set("n", "<leader>fg", function()
-        require("telescope.builtin").grep_string()
-      end, { desc = "Grep word under cursor" })
-      keymap.set("v", "<leader>fg", function()
-        require("telescope.builtin").grep_string()
-      end, { desc = "Grep selection" })
-
-      -- disable keymap <leader><leader>
-      keymap.set("n", "<leader><leader>", "<nop>", { desc = "Disable <leader><leader>", nowait = true })
+      -- Keymap đã chuyển lên `keys` ở trên.
     end,
   },
 }
