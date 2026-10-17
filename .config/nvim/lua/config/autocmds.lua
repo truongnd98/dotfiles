@@ -75,3 +75,27 @@ vim.api.nvim_create_user_command("FormatToggle", function(cmd)
     vim.notify(("Format on save (global): %s"):format(vim.g.format_on_save))
   end
 end, { bang = true, desc = "Toggle format on save (! = chỉ buffer hiện tại)" })
+
+-- Buffer này sẽ được format bởi client nào. Dùng khi nghi hai formatter đá
+-- nhau (vd TS: prettier qua none-ls vs formatter của tsc) - xem util/lsp.lua.
+vim.api.nvim_create_user_command("FormatInfo", function()
+  local lsp = require("util.lsp")
+  local ft = vim.bo.filetype
+
+  local can = {}
+  for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0, method = "textDocument/formatting" })) do
+    can[#can + 1] = c.name
+  end
+
+  local use, unavailable = lsp.formatters(0)
+  local lines = {
+    ("filetype      : %s"):format(ft ~= "" and ft or "(không có)"),
+    ("format được   : %s"):format(#can > 0 and table.concat(can, ", ") or "(không client nào)"),
+    ("prefer        : %s"):format(lsp.prefer[ft] or "(không đặt -> dùng tất cả)"),
+    ("SẼ DÙNG       : %s"):format(#use > 0 and table.concat(use, ", ") or "(không gì cả)"),
+  }
+  if unavailable then
+    lines[#lines + 1] = ("LƯU Ý: prefer đặt `%s` nhưng client đó không attach -> đã fallback."):format(unavailable)
+  end
+  vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO)
+end, { desc = "Client nào sẽ format buffer này" })

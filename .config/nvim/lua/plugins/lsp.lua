@@ -17,12 +17,10 @@ return {
 				-- <leader>cf trên TS/JS/JSON/YAML/MD im lặng không làm gì.
 				"prettier",
 				-- for ts/js
-				-- `typescript-language-server` (server name `ts_ls`) là LSP mặc định
-				-- cho TS/JS. Trước đây dùng `tsgo` (TypeScript native-preview): nhanh
-				-- hơn nhưng tên config trong nvim-lspconfig là `tsc`, còn `tsgo` chỉ là
-				-- alias deprecated sẽ bị bỏ ở lspconfig 3.0.0 - thêm một lớp lệch tên
-				-- không đáng đổi. Mason package `tsgo` đã gỡ.
-				"typescript-language-server",
+				-- KHÔNG cài TypeScript qua Mason. TypeScript 7+ đã tích hợp LSP native
+				-- (`tsc --lsp`, compiler viết lại bằng Go) và đi kèm luôn trong
+				-- dependency `typescript` của project -> mỗi repo dùng đúng version của
+				-- nó. Mason chỉ dẫn tới một bản global, lệch với project.
 				"eslint-lsp",
         -- "biome",
         -- "copilot-language-server",
@@ -96,11 +94,11 @@ return {
       -- Nếu để mason-lspconfig enable thêm `rust_analyzer` sẽ có 2 client
       -- cùng attach vào buffer Rust -> duplicate diagnostics & code action.
       --
-      -- `tsgo` đã bỏ khỏi exclude vì package đó đã gỡ khỏi Mason. Nếu sau này
-      -- cài lại thì phải exclude lại: mason map package `tsgo` -> server
-      -- `tsgo` (alias deprecated của `tsc`), bật song song với `ts_ls` sẽ có
-      -- 2 client cùng attach vào buffer TS.
-      automatic_enable = { exclude = { "rust_analyzer" } },
+      -- `tsgo`: mason map package `tsgo` -> server `tsgo`, mà `tsgo` chỉ là alias
+      -- deprecated của `tsc`. Để nó tự enable thì vừa có deprecation warning mỗi
+      -- lần mở file TS, vừa bỏ qua `cmd` mình đặt cho `tsc` (nên nó sẽ cố chạy
+      -- shim node và fail). Config `tsc` được enable thủ công ở lsp config.
+      automatic_enable = { exclude = { "rust_analyzer", "tsgo" } },
     },
   },
   {
@@ -163,28 +161,25 @@ return {
           },
         },
       }
-      -- typescript / javascript
-      -- KHÔNG override `cmd`: `lsp/ts_ls.lua` tự dò
-      -- `<root>/node_modules/.bin/typescript-language-server` trước, rồi mới tới
-      -- PATH (bản Mason). Nhờ vậy mỗi project dùng đúng version TS của nó thay
-      -- vì một bản global - khác biệt quan trọng khi repo pin TS cũ.
-      local has_ts = vim.fn.executable("typescript-language-server") == 1
-      if has_ts then
-        vim.lsp.config["ts_ls"] = {
-          flags = {
-            debounce_text_changes = 100,
-          },
-          settings = {
-            typescript = {
-              inlayHints = { includeInlayParameterNameHints = "all" }
-            },
-            javascript = {
-              inlayHints = { includeInlayParameterNameHints = "all" }
-            },
-          },
-        }
-        vim.lsp.enable("ts_ls")
-      end
+      -- typescript / javascript: LSP native của TypeScript 7+
+      --
+      -- Tên config trong nvim-lspconfig là `tsc` (`tsgo` là alias deprecated của
+      -- nó, sẽ bị bỏ ở lspconfig 3.0.0).
+      --
+      -- KHÔNG override `cmd`: `lsp/tsc.lua` tự dò `<root>/node_modules/.bin/tsc`
+      -- trước rồi mới tới PATH, và chỉ nhận binary có `--version` >= 7. Nhờ vậy
+      -- mỗi project chạy đúng version TypeScript mà nó pin.
+      --
+      -- Việc dò binary nằm trong `root_dir` của tsc.lua chứ không phải `cmd`, nên
+      -- không thể lách bằng cách ghi đè `cmd` - nếu không tìm thấy `tsc` hỗ trợ
+      -- `--lsp` thì nó không attach và báo:
+      --   "tsc: no binary supporting `--lsp` found (requires TypeScript 7.0+)"
+      --
+      -- Điều kiện để chạy: project có `typescript` >= 7 trong devDependencies, VÀ
+      -- node >= 20. `bin/tsc` của TS 7 là file không đuôi trong package
+      -- `"type":"module"`; Node 18 không nạp được (ERR_UNKNOWN_FILE_EXTENSION) dù
+      -- `engines` của package khai `>=16.20.0`.
+      vim.lsp.enable("tsc")
 
       -- Js: eslint dùng `vscode-eslint-language-server` (mason: `eslint-lsp`).
       local has_eslint = vim.fn.executable("vscode-eslint-language-server") == 1
@@ -193,22 +188,16 @@ return {
       end
 
       -- Thiếu tool thì nói ra, một lần, lúc thật sự mở file TS/JS.
-      if not has_ts or not has_eslint then
+      if not has_eslint then
         vim.api.nvim_create_autocmd("FileType", {
           group = vim.api.nvim_create_augroup("lsp.ts_missing_tools", { clear = true }),
           pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
           once = true,
           callback = function()
-            local missing = {}
-            if not has_ts then
-              table.insert(missing, "typescript-language-server")
-            end
-            if not has_eslint then
-              table.insert(missing, "eslint-lsp")
-            end
             vim.notify(
-              "LSP cho TS/JS chưa đủ tool: " .. table.concat(missing, ", ")
-                .. "\nChạy `:MasonInstallAll` (hoặc `:Mason`) để cài.",
+              "eslint-lsp chưa cài - chạy `:MasonInstallAll` (hoặc `:Mason`)."
+                .. "\n(TypeScript LSP không qua Mason: cần `typescript` >= 7 trong"
+                .. " devDependencies của project và node >= 20.)",
               vim.log.levels.WARN
             )
           end,
