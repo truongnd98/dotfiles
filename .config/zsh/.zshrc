@@ -256,10 +256,22 @@ _clean_screen(){
 # ---- Clean screen----
 alias cls=_clean_screen
 
-# nvm đã bỏ hẳn. node/npm/npx lấy từ bản cài ở /usr/local/bin (không qua
-# version manager nào). Nếu cần đổi version node thì cài qua brew
-# (`brew install node@22`) hoặc dùng fnm/mise - đều nhanh hơn nvm vì không
-# phải source một script shell 3000 dòng mỗi lần mở terminal.
+# ---- Node (fnm) ----
+# Thay cho nvm. fnm là binary Rust nên `fnm env` chỉ là một lần spawn process
+# (~5ms), khác nvm phải source một script shell ~3000 dòng mỗi lần mở terminal.
+#
+#   --use-on-cd              tự đổi version khi cd vào thư mục có .nvmrc /
+#                            .node-version (các project cũ dùng nvm vẫn chạy)
+#   --version-file-strategy  recursive: tìm version file cả ở thư mục cha, cần
+#                            cho monorepo khi làm việc trong packages/*
+#
+# Bản mặc định đặt bằng `fnm default <version>`; xem `fnm list`.
+# Node >= 20 là điều kiện để `tsc --lsp` của TypeScript 7 chạy (xem
+# nvim/lua/plugins/lsp.lua) - bin của nó là file không đuôi trong package
+# "type":"module" nên Node 18 không nạp được.
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
+fi
 
 #
 # # autoload -U +X bashcompinit && bashcompinit
