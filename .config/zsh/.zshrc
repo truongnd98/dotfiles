@@ -256,21 +256,10 @@ _clean_screen(){
 # ---- Clean screen----
 alias cls=_clean_screen
 
-# # ---- Lazy load nvm, node, npm, npx (Zsh) ----
-# export NVM_DIR="$HOME/.nvm"
-#
-# _load_nvm() {
-#   # unset -f nvm node npm npx _load_nvm
-#   unset -f nvm _load_nvm
-#   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-# }
-
-# `nvm()  { _load_nvm; nvm "$@"; }` đã xoá: `_load_nvm` bị comment ở trên
-# nên hàm này tự gọi lại chính nó (đệ quy vô hạn). Lazy-load nvm thật nằm ở
-# khối `zi ice wait lucid atload` phía dưới.
-# node() { _load_nvm; node "$@"; }
-# npm()  { _load_nvm; npm "$@"; }
-# npx()  { _load_nvm; npx "$@"; }
+# nvm đã bỏ hẳn. node/npm/npx lấy từ bản cài ở /usr/local/bin (không qua
+# version manager nào). Nếu cần đổi version node thì cài qua brew
+# (`brew install node@22`) hoặc dùng fnm/mise - đều nhanh hơn nvm vì không
+# phải source một script shell 3000 dòng mỗi lần mở terminal.
 
 #
 # # autoload -U +X bashcompinit && bashcompinit
@@ -359,15 +348,6 @@ bindkey "^ " autosuggest-accept
 zi ice wait lucid
 zi light zdharma-continuum/fast-syntax-highlighting
 
-# ---- Lazy load nvm
-export NVM_DIR="$HOME/.nvm"
-zi ice wait lucid atload='
-  unset -f nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-'
-zi snippet /dev/null
-# ---- Lazy load nvm
-#
 # compinit đã chạy sớm (phía trên, trước fzf) nên zinit chỉ *ghi lại* các
 # lệnh `compdef` của plugin thay vì áp dụng ngay -> replay ở đây.
 zinit cdreplay -q
